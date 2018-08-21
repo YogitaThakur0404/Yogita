@@ -1,0 +1,24 @@
+
+
+<form class="form1" >
+        Number 1:
+        <input type="number" value=0 min="0" max="100" ng-model="number1" ng-bind="number1">
+<br>
+        Number 2:
+        <input type="number"  min="1" max="100" ng-model="number2"  ng-bind="number2">
+<br>
+
+        Select option:
+        <select ng-model="operator" ng-init="sum">
+            
+            <option value="sum" ng-model="sum">Sum</option>
+            <option value="sub" ng-model="sub">Sub</option>
+            <option value="mult" ng-model="mult">Mult</option>
+            <option value="dev" ng-model="dev">Devide</option>
+
+        </select>
+
+        <br>
+        <input type="submit" ng-click="result()" >
+       <p> {{val}}</p>
+    </form>
