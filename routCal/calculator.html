@@ -1,0 +1,25 @@
+
+<div ng-controller="calCtrl">
+<form class="form1" >
+        Number 1:
+        <input type="number" min="0" max="100" ng-model="model.number1" >
+<br>
+        Number 2:
+        <input type="number" min="0" max="100" ng-model="model.number2" >
+<br>
+
+        Select option:
+        <select ng-model="model.operator">
+            <option value="default" >Option</option>
+            <option value="sum" ng-model="sum">Sum</option>
+            <option value="sub" ng-model="sub">Sub</option>
+            <option value="mult" ng-model="mult">Mult</option>
+            <option value="dev" ng-model="dev">Devide</option>
+
+        </select>
+
+        <br>
+        <input type="submit" ng-click="result()" >
+       <p> {{val}}</p>
+    </form>
+</div>
