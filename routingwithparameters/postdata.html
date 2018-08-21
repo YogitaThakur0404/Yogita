@@ -1,0 +1,17 @@
+<html ng-app="myApp">
+<body ng-controller="indexCtrl">
+
+    <button  ng-click="fetch()">fetch</button><br>
+   
+   
+   <div ng-repeat="(key,value) in datas">
+ <p>UserId:{{value.userId}}<br>
+Id:{{value.id}} <br>
+ Title:{{value.title}} <br>
+ Body:{{value.body}}</p>
+ <br>
+   </div>
+    <script src="module.js"></script>
+    <script src="indexcontroller.js"></script>
+</body>
+</html>

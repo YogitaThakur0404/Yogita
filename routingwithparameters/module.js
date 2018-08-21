@@ -22,6 +22,11 @@ myapp.config(function($routeProvider){
         templateUrl: 'calculator.html',
         controller: 'calCtrl'
     })
+
+    .when('/post', {
+        templateUrl: 'postdata.html',
+        controller: 'postCtrl'
+    })
     
 })
 
