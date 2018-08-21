@@ -28,6 +28,11 @@ myapp.config(function($routeProvider){
         controller: 'postCtrl'
     })
     
+    .when('/post/submit', {
+        templateUrl: 'postdatafile.html',
+        controller: 'postDataCtrl'
+    })
+    
 })
 
 

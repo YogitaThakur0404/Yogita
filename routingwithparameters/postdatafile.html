@@ -1,0 +1,25 @@
+
+    
+    <body >
+
+
+        <form class="form1" >
+           USerId:
+            <input type="number"  min="1" max="100" ng-model="userId" ng-bind="USerId">
+    <br>
+          
+    
+    Title:
+    <input type="text"  ng-model="title"  ng-bind="title">
+<br>
+body:
+<input type="text"   ng-model="body"  ng-bind="body">
+<br>
+            <br>
+            <input type="submit" ng-click="submitData(userId,title,body)" >
+           <p>{{msg}} </p>
+        </form>
+    
+  
+        
+    </body>
