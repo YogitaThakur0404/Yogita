@@ -46,7 +46,7 @@ app.get("/all", function(req, res) {
         if (error) {
             res.send(error);
         } else {
-            console.log("nm=" + data.companyName);
+            console.log("companies=" + data.companyName);
             res.send(data);
         }
     });
@@ -78,6 +78,7 @@ app.get("/all/:companyName", function(req, res) {
         }
     });
 })
+
 
 //4 get
 /*
@@ -127,19 +128,22 @@ app.post("/company", function(req, res) {
         function(callback) {
             companys.findOne({ $and: [{ companyName: cmp.companyName }, { status: "activated" }] }, function(error, existingcmp) {
                 if (existingcmp == null) {
-                    companys.create(req.body, function(error, data) {
-                        if (error) {
-                            console.log("error in posting data");
-                            callback("data not added");
-                        } else {
-                            callback(null, data);
-                        }
-                    })
+                    callback();
                 } else {
                     callback("error- company already exist ");
                 }
             })
         },
+        function(callback) {
+            companys.create(req.body, function(error, data) {
+                if (error) {
+                    console.log("error in posting data");
+                    callback("data not added");
+                } else {
+                    callback("company record added !!");
+                }
+            })
+        }
     ], function(error, data) {
         if (error) {
             res.send(error);
@@ -149,7 +153,7 @@ app.post("/company", function(req, res) {
     });
 })
 
-//5 This responds a PUT request 
+//6 This responds a PUT request 
 /*
 PUT - by companyName
 1. update company : Consider companyName as req prams
@@ -162,19 +166,23 @@ app.put("/company/:companyName", function(req, res) {
             function(callback) {
                 companys.findOne({ $and: [{ companyName: req.params.companyName }, { status: "activated" }] }, function(error, existingcmp) {
                     if (existingcmp != null) {
-                        companys.updateOne({ companyName: req.params.companyName }, { $set: { address: req.body.address, country: req.body.country, state: req.body.state, city: req.body.city, status: req.body.status } }, function(err, data) { //updating by updateOne()
-                            if (error) {
-                                console.log("not updated");
-                                callback("not updated");
-                            } else {
-                                callback(null, data);
-                            }
-                        })
+                        callback();
+
                     } else {
                         callback(" error- company does not exist");
                     }
                 })
             },
+            function(callback) {
+                companys.updateOne({ companyName: req.params.companyName }, { $set: { address: req.body.address, country: req.body.country, state: req.body.state, city: req.body.city, status: req.body.status } }, function(error, data) { //updating by updateOne()
+                    if (error) {
+                        console.log("not updated");
+                        callback("not updated");
+                    } else {
+                        callback("Company data updated!!");
+                    }
+                })
+            }
         ],
         function(error, data) {
             if (error) {
@@ -185,7 +193,8 @@ app.put("/company/:companyName", function(req, res) {
         });
 })
 
-//    PUT - by state
+
+//   7. PUT - by state
 //    1. Consider state as req query
 //    2. update company with `status: deactivated` having `status:activated` and `state` from req query
 //    3. If companies exist with above queries - update company with new data
@@ -195,22 +204,25 @@ app.put("/company", function(req, res) {
     console.log("state=" + state);
     async.series([
         function(callback) {
-            companys.find({ state: req.query.state }, function(err, existingcmp) {
+            companys.find({ state: req.query.state }, function(error, existingcmp) {
                 console.log("state=" + req.query.state);
                 if (existingcmp != null) {
-                    companys.updateMany({ state: req.query.state }, { $set: { status: "deactivated", address: req.body.address, country: req.body.country, city: req.body.city } }, function(err, data) { //updating 
-                        if (!data) {
-                            console.log("not updated");
-                            callback("not updated");
-                        } else {
-                            callback(null, data);
-                        }
-                    })
+                    callback();
                 } else {
                     callback(" error- company does not exist");
                 }
             })
         },
+        function(callback) {
+            companys.updateMany({ state: req.query.state }, { $set: { status: "deactivated", companyName: req.body.companyName, address: req.body.address, country: req.body.country, city: req.body.city } }, function(error, data) { //updating 
+                if (error) {
+                    console.log("not updated");
+                    callback("not updated");
+                } else {
+                    callback("company data updated ");
+                }
+            })
+        }
     ], function(error, data) {
         if (error) {
             res.send(error);
@@ -220,15 +232,16 @@ app.put("/company", function(req, res) {
     });
 })
 
+
 /*
-DELETE by comapnyName
+8.DELETE by comapnyName
 1. delete company: Consider companyName as req prams
 2. Check company exist or not with `companyName` and `status:activated`
 3. If company exist - update status as deleted
 4. Else throw error- company does not exist
 use `mongoose` module for DB related queries
     */
-// 6 This responds a DELETE request 
+// 8. This responds a DELETE request 
 app.delete("/company/:companyName", function(req, res) {
     var name = req.params.companyName;
     console.log("companyName=" + name);
@@ -236,19 +249,22 @@ app.delete("/company/:companyName", function(req, res) {
         function(callback) {
             companys.findOne({ $and: [{ companyName: req.params.companyName }, { status: "activated" }] }, function(err, existingcmp) {
                 if (existingcmp != null) {
-                    companys.updateOne({ companyName: req.params.companyName }, { $set: { status: "deleted" } }, function(error, data) { //updating by updateOne()
-                        if (!data) {
-                            console.log("not updated");
-                            callback("not updated");
-                        } else {
-                            callback(null, data);
-                        }
-                    })
+                    callback();
                 } else {
                     callback(" error- company does not exist");
                 }
             })
         },
+        function(callback) {
+            companys.updateOne({ companyName: req.params.companyName }, { $set: { status: "deleted" } }, function(error, data) { //updating by updateOne()
+                if (!data) {
+                    console.log("not updated");
+                    callback("not updated");
+                } else {
+                    callback("status := deleted ");
+                }
+            })
+        }
     ], function(error, data) {
         if (error) {
             res.send(error);
@@ -258,7 +274,7 @@ app.delete("/company/:companyName", function(req, res) {
     });
 })
 
-var server = app.listen(8048, function() {
+var server = app.listen(8028, function() {
 
     var host = server.address().address
     var port = server.address().port
