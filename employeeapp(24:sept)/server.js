@@ -29,7 +29,6 @@ app.get("/show", function(req, res) {
     })
 })
 
-
 //geting by pagination
 /*
 GET - provide page, sort query parameter
@@ -38,7 +37,7 @@ GET - provide page, sort query parameter
 3. set default `sort` parameter as `asc` if no sort parameter provided in url
 */
 
-app.get('/emp1', function(req, res) {
+app.get('/allemp', function(req, res) {
     var pageNo = parseInt(req.query.pageNo);
     var size = parseInt(req.query.size);
     var sort = req.query.sort;
@@ -51,6 +50,7 @@ app.get('/emp1', function(req, res) {
     query.limit = size
     query.sort = { "empName": sort };
     employees.find({ "status": "activated" }, {}, query, function(err, data) {
+        //employees.aggregatePaginate({ "status": "activated" }, {}, query, function(err, data) {
         // Mongo command to fetch all data from collection.
         if (err) {
             response = { "error": true, "message": "Error fetching data" };
@@ -66,27 +66,18 @@ app.get('/emp1', function(req, res) {
 //POST -
 //1. Add new employee with status activated
 app.post("/emp", function(req, res) {
-    var emp1 = req.body;
-    console.log("emp=" + emp1);
-
-    var status = req.body.status;
-    console.log("status=" + status);
-
-    if (status == "activated") {
-        employees.create(emp1, function(error, data) {
-            console.log("data in save = " + data);
-            console.log("emp1 in save =" + emp1);
-            if (!data) {
-                console.log("error in posting data");
-                res.send("data not added");
-            } else {
-                res.send(data);
-            }
-        })
-    } else {
-        res.send("status needs to be activated ");
-    }
-
+    console.log("create emp data");
+    var emp = new employees({ "empName": req.body.empName, "empAddress": req.body.empAddress, "country": req.body.country, "state": req.body.state, "department": req.body.department, "status": "activated" });
+    console.log("emp=" + emp);
+    companys.create(emp, function(error, data) {
+        console.log("data in save = " + data);
+        if (!data) {
+            console.log("error in posting data");
+            res.send("data not added");
+        } else {
+            res.send(data);
+        }
+    })
 })
 
 /*
@@ -99,9 +90,7 @@ app.get("/emp/:country", function(req, res) {
     var ctry = req.params.country;
     console.log("ctry=" + ctry);
 
-    employees.aggregate([{ $match: { country: ctry } },
-        { $project: { state: 1 } }
-    ], function(err, result) {
+    employees.aggregate([{ $match: { country: ctry } }, { $match: { status: "activated" } }, { $project: { state: 1 } }], function(err, result) {
         if (err) {
             next(err);
         } else {
@@ -115,7 +104,7 @@ GET  employee by department
 1.department: Consider as req params
 2.Get the total number of employees present under that department
 */
-app.get("/emp22/:department", function(req, res) {
+app.get("/emp/:department", function(req, res) {
     console.log("get dept");
     var dept = req.params.department;
     console.log("dept=" + dept);
@@ -139,7 +128,7 @@ app.get("/emp22/:department", function(req, res) {
 
 
 
-var server = app.listen(8015, function() {
+var server = app.listen(8045, function() {
 
     var host = server.address().address
     var port = server.address().port
