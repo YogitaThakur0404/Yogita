@@ -36,8 +36,8 @@ app.get('/user/:searchPattern', function(req, res) {
     let searchPattern = req.params.searchPattern;
     users.find({ 'userInfo.userName': { '$regex': searchPattern, '$options': 'i' } }, function(err, data) {
         if (!data) {
-            console.log("error in posting data");
-            res.send("data not added");
+            console.log("data not found");
+            res.send("data not found");
         } else {
             res.json(data);
         }
@@ -52,6 +52,7 @@ app.post("/users", function(req, res) {
     var user = req.body;
     console.log("user=" + user);
     console.log("user email =" + user.email);
+
     users.findOne({ email: user.email }, function(err, existinguser) {
         if (existinguser == null) {
             console.log("email=" + req.body.email);
@@ -60,13 +61,14 @@ app.post("/users", function(req, res) {
                 if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(req.body.email)) {
                     var user1 = new users({ email: req.body.email, "userInfo.userName": req.body.userInfo.userName, "userInfo.address": req.body.userInfo.address, "status": "activated" });
                     console.log("user1=" + user1);
-
+                    //creating new user data
                     users.create(user1, function(err, data) {
                         if (!data) {
                             console.log("error in posting data");
                             res.send("data not added");
                         } else {
-                            res.json(data);
+                            // res.json(data);
+                            res.send("data inserted");
                         }
                     })
                 } else {
@@ -79,11 +81,12 @@ app.post("/users", function(req, res) {
     })
 })
 
-//PUT - user/:id - update by _id of mongo Document  , return the data inserted
+//PUT - user/:id - update by _id of mongo Document, return the data inserted
 //should not allow a different email to be updated via the request body
 app.put("/users/:id", function(req, res) {
     var id1 = req.params.id;
     console.log("id1=" + id1);
+
     users.findOne({ _id: req.params.id }, function(err, existinguser) {
         if (existinguser == null) {
             res.send("id not exist");
@@ -93,7 +96,8 @@ app.put("/users/:id", function(req, res) {
                     console.log("not updated");
                     res.send("not updated");
                 } else {
-                    res.send(data);
+                    //res.send(data);
+                    res.send("data inserted");
                 }
             })
 
@@ -106,18 +110,18 @@ app.put("/users/:id", function(req, res) {
 //should not allow a different email to be updated via the request body
 app.put("/user/:email", function(req, res) {
     var email = req.params.email;
-    console.log("id1=" + email);
+    console.log("email=" + email);
 
     users.findOne({ email: req.params.email }, function(err, existinguser) {
         if (existinguser == null) {
             res.send("email id not exist");
         } else {
             users.updateOne({ email: req.params.email }, { $set: { 'userInfo.userName': req.body.userInfo.userName, 'userInfo.address': req.body.userInfo.address } }, function(err, data) {
-                if (data.leng) {
+                if (!data) {
                     console.log("not updated");
                     res.send("not updated");
                 } else {
-                    res.send("data inserted successfully");
+                    res.send("data inserted");
                 }
             })
 
@@ -204,13 +208,16 @@ app.put("/user/:email", function(req, res) {
 
 // PUT - user/:id - _id or email
 // change status from activated from  deactivated
-app.put('/user/:id', function(req, res) {
+app.put('/user1/:id', function(req, res) {
     let id = req.params.id;
 
-    users.find({ $or: [{ 'email': id }, { '_id': id }] }, function(error, data) {
-        console.log(data);
-        if (data.length > 0) {
-            users.update({ $or: [{ 'email': id }, { '_id': id }] }, { '$set': { 'status': "deactivated" } },
+    users.find({ $and: [{ $or: [{ 'email': id }, { '_id': id }] }, { status: { "$ne": 'deleted' } }] }, function(error, data) {
+        // users.find({ $or: [{ 'email': id }, { '_id': id }] }, function(error, data) {
+        console.log("data=" + data);
+        if (!data) {
+            res.send('Data not found to Update in query');
+        } else if (data.length > 0) {
+            users.updateOne({ $or: [{ 'email': id }, { '_id': id }] }, { '$set': { 'status': "deactivated" } },
                 function(error) {
                     if (error) {
                         console.log(error);
@@ -219,11 +226,8 @@ app.put('/user/:id', function(req, res) {
                         res.send('updated ');
                     }
                 })
-        } else {
-            res.send('Data not found to Update');
         }
     })
-
 })
 
 //delete
@@ -231,24 +235,25 @@ app.put('/user/:id', function(req, res) {
 // change status to deleted
 app.delete('/user/:id', function(req, res) {
     let id = req.params.id;
-
-    users.find({ $or: [{ 'email': id }, { '_id': id }] }, function(error, data) {
-        console.log(data);
-        if (data.length > 0) {
-            users.update({ $or: [{ 'email': id }, { '_id': id }] }, { '$set': { 'status': "deleted" } },
-                function(error) {
-                    if (error) {
-                        console.log(error);
-                        return;
-                    } else {
-                        res.send('updated ');
-                    }
-                })
-        } else {
-            res.send('Data not found to Update');
-        }
-    })
-
+    console.log("id=" + id);
+    //  users.find({ $or: [{ 'email': id }, { '_id': id }] }, function(error, data) {
+    users.find({ $and: [{ $or: [{ 'email': id }, { '_id': id }] }, { status: { "$ne": 'deleted' } }] },
+        function(error, data) {
+            console.log(data);
+            if (data.length > 0) {
+                users.update({ $or: [{ 'email': id }, { '_id': id }] }, { '$set': { 'status': "deleted" } },
+                    function(error) {
+                        if (error) {
+                            console.log(error);
+                            return;
+                        } else {
+                            res.send('updated ');
+                        }
+                    })
+            } else {
+                res.send('Data not found to Update');
+            }
+        })
 })
 
 
@@ -288,7 +293,7 @@ app.get("/company/:companyName", function(req, res) {
     if (id === 'companyName') {
         companys.distinct(("companyName"), function(error, data) {
             if (data.length > 0) {
-                console.log("ctry=" + data);
+                console.log("company=" + data);
                 res.send(data);
             } else {
                 res.send("invalid");
@@ -308,13 +313,14 @@ app.post("/company", function(req, res) {
     var email = req.body.companyInfo.userInfo.userEmail[0];
     console.log("company1=" + company1);
     console.log("email=" + email);
-    users.find({ "email": email }, function(err, data) {
+
+    users.find({ "email": email }, function(error, data) {
         console.log("doc=" + data);
         if (data.length > 0) {
             console.log("create cmp data");
-            var cmp1 = new companys({ "companyInfo.userInfo.userEmail": email, "companyInfo.fax": req.body.companyInfo.fax, "companyInfo.RegistartionNo": req.body.companyInfo.RegistartionNo, "companyName": req.body.companyName, "status": req.body.status });
+            var cmp1 = new companys({ "companyInfo.userInfo.userEmail": email, "companyInfo.fax": req.body.companyInfo.fax, "companyInfo.RegistartionNo": req.body.companyInfo.RegistartionNo, "companyName": req.body.companyName, "status": "activated" });
             console.log("cmp1=" + cmp1);
-            companys.create(cmp1, function(err, data) {
+            companys.create(cmp1, function(error, data) {
                 // companys.create({company1}, function(err, data) {
                 console.log("data in save = " + data);
                 console.log("cmp1 in save =" + company1);
@@ -326,7 +332,8 @@ app.post("/company", function(req, res) {
                 }
             })
         } else {
-            res.send('User isnot exist');
+            //res.send('User not exist');
+            res.send(error);
         }
     })
 })
@@ -348,8 +355,7 @@ app.put("/company/:id", function(req, res) {
                 if (existingcmp == null) {
                     res.send("id not exist");
                 } else {
-                    companys.updateOne({ _id: req.params.id }, { $set: { 'companyName': req.body.companyName, 'companyInfo.fax': req.body.companyInfo.fax, 'companyInfo.RegistartionNo': req.body.companyInfo.RegistartionNo, 'status': req.body.status } }, function(err, data) {
-
+                    companys.updateOne({ _id: req.params.id }, { $set: { 'companyName': req.body.companyName, 'companyInfo.fax': req.body.companyInfo.fax, 'companyInfo.RegistartionNo': req.body.companyInfo.RegistartionNo } }, function(err, data) {
                         if (!data) {
                             console.log("not updated");
                             res.send("not updated");
@@ -372,14 +378,15 @@ app.put("/company/:id", function(req, res) {
 app.delete("/company/:Id", function(req, res) {
     var id = req.params.Id;
     console.log("id=" + id);
-    companys.findOne({ _id: req.params.Id }, function(err, existingcmp) {
+    //companys.findOne({ _id: req.params.Id }, function(err, existingcmp) {
+    companys.find({ $and: [{ "_id": id }, { status: { "$ne": 'deleted' } }] }, function(error, data) {
         if (existingcmp != null) {
-            companys.update({ _id: req.params.Id }, { $set: { status: "deleted" } }, function(error, data) { //updating by updateOne()
+            companys.update({ _id: req.params.Id }, { $set: { status: "deleted" } }, function(error, data) { //updating by update()
                 if (!data) {
                     console.log("not updated");
                     res.send("not updated");
                 } else {
-                    res.send(data);
+                    res.send("updated successfully");
                 }
             })
         } else {
