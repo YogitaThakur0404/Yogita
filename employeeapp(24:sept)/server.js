@@ -37,21 +37,29 @@ GET - provide page, sort query parameter
 3. set default `sort` parameter as `asc` if no sort parameter provided in url
 */
 
-app.get('/allemp', function(req, res) {
+//agg paginate
+app.get('/employee', function(req, res) {
     var pageNo = parseInt(req.query.pageNo);
     var size = parseInt(req.query.size);
+
     var sort = req.query.sort;
-    var query = {}
-    if (pageNo < 0 || pageNo === 0) {
-        response = { "error": true, "message": "invalid page number, should start with 1" };
-        return res.json(response)
+    var pageOptions = {
+        pageNo: req.query.pageNo || 0,
+        size: req.query.size || 10
     }
-    query.skip = size * (pageNo - 1)
-    query.limit = size
-    query.sort = { "empName": sort };
-    employees.find({ "status": "activated" }, {}, query, function(err, data) {
-        //employees.aggregatePaginate({ "status": "activated" }, {}, query, function(err, data) {
+    console.log("pageno" + pageOptions.pageNo);
+    console.log("size" + pageOptions.size);
+    employees.aggregate([
+        { '$match': { 'status': 'activated' } },
+        { '$group': { '_id': "_id", 'result': { '$push': '$$CURRENT' } } },
+        { '$project': { '_id': 0, 'result': 1, 'pages': { '$divide': [{ '$size': '$result' }, pageOptions.size] } } },
+        { '$unwind': '$result' },
+        { '$skip': (pageOptions.pageNo - 1) * pageOptions.size },
+        { '$limit': pageOptions.size }
+    ], function(err, data) {
+        ///employees.find({ "status": "activated" }, {}, query, function(err, data) {
         // Mongo command to fetch all data from collection.
+        console.log("data=" + data);
         if (err) {
             response = { "error": true, "message": "Error fetching data" };
         } else {
@@ -62,6 +70,38 @@ app.get('/allemp', function(req, res) {
     });
 })
 
+// //geting by pagination
+// /*
+// GET - provide page, sort query parameter
+// 1. Get all Employee having `status:activated` from DB
+// 2. if page parameter is provided  send 10 records per page Else send default 10 records
+// 3. set default `sort` parameter as `asc` if no sort parameter provided in url
+// */
+
+// app.get('/allemp', function(req, res) {
+//     var pageNo = parseInt(req.query.pageNo);
+//     var size = parseInt(req.query.size);
+//     var sort = req.query.sort;
+//     var query = {}
+//     if (pageNo < 0 || pageNo === 0) {
+//         response = { "error": true, "message": "invalid page number, should start with 1" };
+//         return res.json(response)
+//     }
+//     query.skip = size * (pageNo - 1)
+//     query.limit = size
+//     query.sort = { "empName": sort };
+//     employees.find({ "status": "activated" }, {}, query, function(err, data) {
+//         //employees.aggregatePaginate({ "status": "activated" }, {}, query, function(err, data) {
+//         // Mongo command to fetch all data from collection.
+//         if (err) {
+//             response = { "error": true, "message": "Error fetching data" };
+//         } else {
+//             response = { "employee": data };
+//             res.json(response);
+//         }
+
+//     });
+// })
 
 //POST -
 //1. Add new employee with status activated
@@ -108,8 +148,6 @@ app.get("/emp/:department", function(req, res) {
     console.log("get dept");
     var dept = req.params.department;
     console.log("dept=" + dept);
-
-
     employees.aggregate([{ $match: { department: dept } }, {
         $group: {
             _id: "$department", //$region is the column name in collection
@@ -126,10 +164,7 @@ app.get("/emp/:department", function(req, res) {
 })
 
 
-
-
 var server = app.listen(8045, function() {
-
     var host = server.address().address
     var port = server.address().port
     console.log("Example app listening at http://%s:%s", host, port)
