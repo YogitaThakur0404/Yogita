@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bpi="urn:gs1:tsd:basic_product_information_module:xsd:1" xmlns:pai="urn:gs1:tsd:product_allergen_information_module:xsd:1">
 <xsl:output method="xml" indent="yes"/>
-    <xsl:template match="productData">
+ <xsl:template match="productData">
 <productData>
 <gtin><xsl:value-of select="gtin"/></gtin>
 <targetMarket><xsl:value-of select="targetMarket"/></targetMarket>
@@ -10,7 +10,7 @@
  
 
  <basicProductInformation>
-<productName><xsl:value-of select="productDataRecord/module/bpi:basicProductInformationModule/productName"/></productName>
+<productName languageCode="en"><xsl:value-of select="productDataRecord/module/bpi:basicProductInformationModule/productName"/></productName>
 <gpcCategoryCode><xsl:value-of select="productDataRecord/module/bpi:basicProductInformationModule/gpcCategoryCode"/></gpcCategoryCode>
 <regulatedProductName><xsl:value-of select="productDataRecord/module/bpi:basicProductInformationModule/regulatedProductName"/></regulatedProductName>
 <brandName><xsl:value-of select="productDataRecord/module/bpi:basicProductInformationModule/brandNameInformation/brandName"/></brandName>
@@ -18,12 +18,12 @@
 
 <productAllergenInformation>
  <allergen>
-
-<allergenCode>
-<xsl:value-of select="productDataRecord/module/pai:productAllergenInformationModule/allergenRelatedInformation/allergen/allergenTypeCode"/>
-</allergenCode>
-
+ <xsl:for-each select="productDataRecord/module/pai:productAllergenInformationModule/allergenRelatedInformation/allergen">
+   <allergenCode>   <xsl:value-of select="allergenTypeCode"/></allergenCode>
+    </xsl:for-each>
  </allergen>
+
+
 </productAllergenInformation>
 
  </productData>
