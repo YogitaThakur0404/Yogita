@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+   <productData xmlns:bpi="urn:gs1:tsd:basic_product_information_module:xsd:1"
+             xmlns:pai="urn:gs1:tsd:product_allergen_information_module:xsd:1">
+   <gtin>00031604042226</gtin>
+   <targetMarket>840</targetMarket>
+   <informationProviderGLN>0031604000004</informationProviderGLN>
+   <informationProviderName>Pharmavite.com</informationProviderName>
+   <basicProductInformation>
+      <productName>NM Digestive Probiotics Daily Balance</productName>
+      <gpcCategoryCode>51000000</gpcCategoryCode>
+      <regulatedProductName>Nature Made® Digestive Probiotics Daily Balance</regulatedProductName>
+      <brandName>Pharmavite LLC</brandName>
+   </basicProductInformation>
+   <productAllergenInformation>
+      <allergen>
+         <allergenCode>AY AP AC</allergenCode>
+      </allergen>
+   </productAllergenInformation>
+</productData>
+

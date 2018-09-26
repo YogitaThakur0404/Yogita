@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+   <query_by_gtin_response:queryByGtinResponse xmlns:query_by_gtin_response="urn:gs1:tsd:query_by_gtin_response:xsd:1"
+                                            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                            xmlns:fo="http://www.w3.org/1999/XSL/Format"
+                                            xmlns:ns0="urn:qliktag:naturemade:xsd:1"
+                                            xsi:schemaLocation="urn:gs1:tsd:query_by_gtin_response:xsd:1 QueryByGtinResponse.xsd urn:gs1:tsd:basic_product_information_module:xsd:1 BasicProductInformationModule.xsd urn:gs1:tsd:nutritional_product_information_module:xsd:1 NutritionalProductInformationModule.xsd">
+   <productData>
+      <gtin>00031604042226</gtin>
+      <targetMarket>840</targetMarket>
+      <informationProviderGLN>0031604000004</informationProviderGLN>
+      <informationProviderName>Pharmavite.com</informationProviderName>
+      <productDataRecord>
+         <module>
+            <bpi:basicProductInformationModule xmlns:bpi="urn:gs1:tsd:basic_product_information_module:xsd:1">
+               <productName languageCode="en">NM Digestive Probiotics Daily Balance</productName>
+               <gpcCategoryCode>51000000</gpcCategoryCode>
+               <regulatedProductName languageCode="en">Nature Made® Digestive Probiotics Daily Balance</regulatedProductName>
+               <brandNameInformation>
+                  <brandName>Pharmavite LLC</brandName>
+               </brandNameInformation>
+               <packagingSignatureLine>
+                  <partyContactRoleCode>DISTRIBUTOR</partyContactRoleCode>
+                  <partyContactName>1-800-276-2878</partyContactName>
+                  <gln>0031604000004</gln>
+                  <communicationChannel>
+                     <communicationChannelCode>TELEPHONE</communicationChannelCode>
+                     <communicationValue>Mission Hills, CA 91346-9606, U.S.A.</communicationValue>
+                     <communicationChannelName>TELEPHONE</communicationChannelName>
+                  </communicationChannel>
+                  <communicationChannel>
+                     <communicationChannelCode>WEBSITE</communicationChannelCode>
+                     <communicationValue>4/1/2016</communicationValue>
+                     <communicationChannelName>WEBSITE</communicationChannelName>
+                  </communicationChannel>
+                  <communicationChannel>
+                     <communicationChannelCode>SOCIAL_MEDIA</communicationChannelCode>
+                     <communicationValue>Take one pair of capsules daily with a cold or room temperature drink. Take with food when possible. For easier swallowing, take with water before and during ingestion.</communicationValue>
+                     <communicationChannelName>SOCIAL MEDIA</communicationChannelName>
+                  </communicationChannel>
+               </packagingSignatureLine>
+            </bpi:basicProductInformationModule>
+         </module>
+         <module>
+            <pai:productAllergenInformationModule xmlns:pai="urn:gs1:tsd:product_allergen_information_module:xsd:1">
+               <allergenRelatedInformation>
+                  <allergenStatement languageCode="en">Contains: Soy</allergenStatement>
+                  <allergenSpecificationAgency>FDA</allergenSpecificationAgency>
+                  <allergenSpecificationName>FDA Food Allergen Labeling</allergenSpecificationName>
+                  <allergen>
+                     <allergenTypeCode>AY</allergenTypeCode>
+                     <levelOfContainmentCode>CONTAINS</levelOfContainmentCode>
+                  </allergen>
+                  <allergen>
+                     <allergenTypeCode>AP</allergenTypeCode>
+                     <levelOfContainmentCode>CONTAINS</levelOfContainmentCode>
+                  </allergen>
+                  <allergen>
+                     <allergenTypeCode>AC</allergenTypeCode>
+                     <levelOfContainmentCode>CONTAINS</levelOfContainmentCode>
+                  </allergen>
+               </allergenRelatedInformation>
+            </pai:productAllergenInformationModule>
+         </module>
+         <module>
+            <pcae:productClaimsAndEndorsementsModule xmlns:pcae="urn:gs1:tsd:product_claims_and_endorsements_module:xsd:1">
+               <warningStatement languageCode="en">Some supplements may interact with certain medications. If you are taking any medication, please consult with your physician before using this product.</warningStatement>
+               <warningStatement languageCode="en">Contains: Soy</warningStatement>
+               <healthClaimDescription languageCode="en">Clinically Studied Strain</healthClaimDescription>
+               <healthClaimDescription languageCode="en">Probiotic naturally helps relieve occasional gas, bloating and abdominal discomfort†</healthClaimDescription>
+               <healthClaimDescription languageCode="en">Helps naturally support digestive balance†</healthClaimDescription>
+               <healthClaimDescription languageCode="en">Gentle Enough For Everyday Use</healthClaimDescription>
+               <healthClaimDescription languageCode="en">A high functioning digestive tract is important for overall health and wellness. Nature Made® Daily Balance helps naturally support digestive balance and helps build and support a healthy digestive system.† Each capsule is formulated with 10 billion live cells of the Probi Digestis® probiotic strain Lactobacillus plantarum 299v.‡ Just one capsule daily, Nature Made Daily Balance naturally helps relieve occasional gas, bloating, and abdominal discomfort while helping to support a healthy digestive system.†</healthClaimDescription>
+               <healthClaimDescription languageCode="en">Clinically efficacious dose</healthClaimDescription>
+               <healthClaimDescription languageCode="en">Guaranteed potency until expiration‡</healthClaimDescription>
+               <healthClaimDescription languageCode="en">No Color Added • No Artificial Flavors • No Preservatives • No Yeast • Gluten Free</healthClaimDescription>
+               <healthClaimDescription languageCode="en">No Dairy</healthClaimDescription>
+               <healthClaimDescription languageCode="en">100% Vegetarian</healthClaimDescription>
+               <healthClaimDescription languageCode="en">No refrigeration necessary</healthClaimDescription>
+               <healthClaimDescription languageCode="en">N</healthClaimDescription>
+            </pcae:productClaimsAndEndorsementsModule>
+         </module>
+         <module>
+            <pim:productInstructionsModule xmlns:pim="urn:gs1:tsd:product_instructions_module:xsd:1">
+               <consumerUsageInstructions languageCode="en">18 Years and Up</consumerUsageInstructions>
+               <consumerUsageInstructions languageCode="en">1 Capsule</consumerUsageInstructions>
+               <consumerStorageInstructions languageCode="en">If you are pregnant or nursing, consult your physician before taking this product.</consumerStorageInstructions>
+            </pim:productInstructionsModule>
+         </module>
+         <module>
+            <poi:productOriginInformationModule xmlns:poi="urn:gs1:tsd:product_origin_information_module:xsd:1">
+               <productOriginStatement languageCode="en">†These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease.</productOriginStatement>
+            </poi:productOriginInformationModule>
+         </module>
+         <module>
+            <pqi:productQuantityInformationModule xmlns:pqi="urn:gs1:tsd:product_quantity_information_module:xsd:1">
+               <netContent measurementUnitCode="Capsule">90</netContent>
+            </pqi:productQuantityInformationModule>
+         </module>
+         <module>
+            <fabii:foodAndBeverageIngredientInformationModule xmlns:fabii="urn:gs1:tsd:food_and_beverage_information_module:xsd:1"/>
+         </module>
+         <module>
+            <puas:productUsageAndSafetyModule xmlns:puas="urn:gs1:tsd:product_usage_and_safety_module:xsd:1">
+               <productUsageAndSafety>
+                  <itemMinimumDurability timeMeasurementUnitCode="DAY">48</itemMinimumDurability>
+               </productUsageAndSafety>
+            </puas:productUsageAndSafetyModule>
+         </module>
+      </productDataRecord>
+   </productData>
+</query_by_gtin_response:queryByGtinResponse>
