@@ -10,7 +10,7 @@
  
 
  <basicProductInformation>
-<productName languageCode="en"><xsl:value-of select="productDataRecord/module/bpi:basicProductInformationModule/productName"/></productName>
+<productName ><xsl:attribute name="languageCode"><xsl:value-of select="productDataRecord/module/bpi:basicProductInformationModule/productName/@languageCode"/></xsl:attribute><xsl:value-of select="productDataRecord/module/bpi:basicProductInformationModule/productName"/></productName>
 <gpcCategoryCode><xsl:value-of select="productDataRecord/module/bpi:basicProductInformationModule/gpcCategoryCode"/></gpcCategoryCode>
 <regulatedProductName><xsl:value-of select="productDataRecord/module/bpi:basicProductInformationModule/regulatedProductName"/></regulatedProductName>
 <brandName><xsl:value-of select="productDataRecord/module/bpi:basicProductInformationModule/brandNameInformation/brandName"/></brandName>
