@@ -1,0 +1,51 @@
+<html ng-app="myapp">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+</head>
+
+<body ng-controller="userCtrl">
+    <table border=2>
+        <div ng-controller="userCtrl">
+            <h1>user App</h1>
+            <thead>
+                <tr>
+                    <th>firstName</th>
+                    <th>lastName</th>
+                    <th>email</th>
+                    <th>address</th>
+                    <th>city</th>
+                    <th>status</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr>
+                              <td><input class="form-control" ng-model="user.firstName"></td>
+                              <td><input class="form-control" ng-model="user.lastName"></td>
+                              <td><input class="form-control" ng-model="user.email"></td>
+                              <td><button class="btn btn-primary" ng-click="addContact()">Add Contact</button></td>
+                              <td><button class="btn btn-info" ng-click="update()">Update</button>&nbsp;&nbsp;<button class="btn btn-info" ng-click="deselect()">Clear</button></td>
+                            </tr> -->
+                <tr ng-repeat="(key,value) in userlist">
+                    <td>{{value.firstName}}</td>
+                    <td>{{value.lastName}}</td>
+                    <td>{{value.email}}</td>
+                    <td>{{value.userInfo.address}}</td>
+                    <td>{{value.userInfo.city}}</td>
+                    <td>{{value.status}}</td>
+                    <!-- <td><button class="btn btn-danger" ng-click="remove(user._id)">Remove</button></td>
+                    <td><button class="btn btn-warning" ng-click="edit(user._id)">Edit</button></td>
+                </tr> -->
+            </tbody>
+    </table>
+
+    </div>
+    </table>
+
+    <script src="module.js"></script>
+    <script src="controllers/userCtrl.js"></script>
+</body>
+
+</html>
