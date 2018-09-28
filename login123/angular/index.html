@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular-animate.min.js"></script>
+    <script src="module.js"></script>
+</head>
+
+<body ng-app="usersApp" ng-controller="loginCtrl">
+    <div class="container">
+        <div class="col-sm-8 col-sm-offset-2">
+            <form name="userForm" ng-submit="submitForm()" novalidate>
+                <!-- emailid -->
+                <div class="form-group" ng-class="{ 'has-error' : userForm.username.$invalid && (userForm.username.$dirty || submitted)}">
+                    <label>EmailID</label>
+                    <input type="email" name="email" class="form-control" ng-model="user.email" placeholder="Your email id" ng-minlength="3" ng-maxlength="8" ng-required="true">
+                    <p ng-show="userForm.username.$error.required && (userForm.username.$dirty || submitted)" class="help-block">You email is required.</p>
+                </div>
+                <!-- PASSWORD -->
+                <div class="form-group" ng-class="{ 'has-error' : userForm.password.$invalid && (userForm.password.$dirty || submitted)}">
+                    <label>Password</label>
+                    <input type="Password" name="password" class="form-control" ng-model="user.password" placeholder="Your Password" ng-required="true">
+                    <p ng-show="userForm.password.$error.required && (userForm.password.$dirty || submitted)" class="help-block">Your password is required.</p>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+        </div>
+    </div>
+    <div ng-view></div>
+
+    <a href="#user">user</a>
+    <a href="#company">company</a>
+
+    <br />
+    <script src="controllers/loginCtrl.js"></script>
+    <script src="controllers/userCtrl.js"></script>
+    <script src="controllers/companyCtrl.js"></script>
+</body>
+
+</html>
