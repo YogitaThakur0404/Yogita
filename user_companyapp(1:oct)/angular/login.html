@@ -1,0 +1,38 @@
+<html ng-app="myapp">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="module.js"></script>
+</head>
+
+<body ng-controller="inputCtrl">
+
+    <div class="container">
+
+
+        <table border=2 align="center" class="table">
+            <tr>
+                <td>Email_Id</td>
+                <td><input type="email" ng-model="email" ng-bind="email" required></td>
+            </tr>
+            <tr>
+                <td>password</td>
+                <td><input type="text" min="8" max="12" ng-model="password" ng-bind="password" required></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="submit" name="submit(email,password)"></td>
+            </tr>
+        </table>
+    </div>
+    <script src="controllers/inputCtrl.js"></script>
+
+</body>
+
+</html>
