@@ -1,0 +1,48 @@
+<html ng-app="myapp">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="module.js"></script>
+</head>
+
+<body ng-controller="loginCtrl">
+
+    <div class="container">
+        <form name="myForm" method="POST" novalidate>
+            <div>
+                Email_Id:<br>
+                <input type="email" name="email" ng-model="email" ng-bind="email" ng-required="true"><br>
+                <span ng-show="myForm.email.$dirty && myForm.email.$error.required">Email is required.</span>
+                <span ng-show="myForm.email.$dirty && myForm.email.$error.email">Invalid Email address.</span>
+
+            </div>
+            <div>
+                password:<br>
+                <input type="password" name="password" ng-model="password" ng-bind="password" ng-required="true"><br>
+                <span ng-show="myForm.password.$dirty && myForm.password.$error.required">password is required.</span>
+                <span ng-show="myForm.password.$dirty && myForm.password.$error.email">Invalid password:length must be 8 to 12.</span>
+            </div>
+            <br>
+            <input type="submit" ng-disabled="!myForm.$valid" class="btn btn-primary" value="submit" onclick="submit(email,password)">
+
+            <!-- <pre>myForm.myName.$error = {{ myForm.myName.$error | json }}</pre> -->
+
+            <!-- <div ng-messages="myForm.myName.$error" style="color:maroon" role="alert">
+                <div ng-messa="required">You did not enter a field</div>
+                <div ng-message="minlength">Your field is too short</div>
+                <div ng-message="maxlength">Your field is too long</div>
+                <div ng-message-default>This field has an input error</div>
+            </div> -->
+        </form>
+    </div>
+    <script src="controllers/loginCtrl.js"></script>
+
+</body>
+
+</html>
