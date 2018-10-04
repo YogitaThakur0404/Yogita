@@ -38,7 +38,8 @@ app.post("/", function(req, res) {
 
         } else {
             var data = { "msg": "invalid credentials" };
-            //res.send("invalid credential");
+            console.log("invalid cond login=" + docs.length);
+            // res.send("/");
             res.redirect('/');
         }
 
@@ -248,7 +249,7 @@ app.put("/user1/:_id", function(req, res) {
 app.get("/company", function(req, res) {
 
     console.log("inside connect.js company app")
-    companys.find({ "status": "activated" }, function(err, docs) {
+    companys.find({}, function(err, docs) {
         console.log("company=" + docs);
         res.send(docs);
     });
@@ -390,14 +391,38 @@ app.put('/company/:id', function(req, res) {
 //deactivate
 //deactivate put
 app.put("/company1/:_id", function(req, res) {
+        // var email = req.params.email;
+        console.log("in connect for deactivate put ");
+        console.log("id=" + req.params._id);
+        companys.findOne({ _id: req.params._id }, function(err, existinguser) {
+            if (existinguser == null) {
+                res.send(" id not exist");
+            } else {
+                companys.updateOne({ _id: req.params._id }, { $set: { "status": "deactivated" } }, function(err, data) {
+                    if (!data) {
+                        console.log("not updated");
+                        res.send("not updated");
+                    } else {
+                        res.send("data inserted");
+                    }
+                })
+
+            }
+        })
+    })
+    //activate
+
+//activate
+//activate put
+app.put("/companys/:_id", function(req, res) {
     // var email = req.params.email;
-    console.log("in connect for deactivate put ");
+    console.log("in connect for activate put ");
     console.log("id=" + req.params._id);
     companys.findOne({ _id: req.params._id }, function(err, existinguser) {
         if (existinguser == null) {
             res.send(" id not exist");
         } else {
-            companys.updateOne({ _id: req.params._id }, { $set: { "status": "deactivated" } }, function(err, data) {
+            companys.updateOne({ _id: req.params._id }, { $set: { "status": "activated" } }, function(err, data) {
                 if (!data) {
                     console.log("not updated");
                     res.send("not updated");

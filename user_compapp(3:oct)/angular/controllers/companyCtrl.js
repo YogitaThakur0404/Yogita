@@ -1,4 +1,4 @@
-myapp.controller("companyCtrl", ["$scope", "$http", function($scope, $http) {
+myapp.controller("companyCtrl", ["$scope", "$http", '$window', function($scope, $http, $window) {
     var _id;
     var refresh = function() {
         $http({ method: "GET", url: "/company" })
@@ -35,6 +35,7 @@ myapp.controller("companyCtrl", ["$scope", "$http", function($scope, $http) {
     //     });
 
 
+    var putdata = 0;
 
     //posting data
     $scope.companyName = null;
@@ -48,11 +49,18 @@ myapp.controller("companyCtrl", ["$scope", "$http", function($scope, $http) {
             },
             "status": status,
         };
+
+        console.log("putdata=" + putdata);
         $http.post("/company", inputValue)
             .then(function(response) {
                     if (response) {
+                        putdata = 1;
                         $scope.msg = "data posted ...."
                         refresh();
+                        //$window.alert("data inserted");
+                    } else {
+                        putdata = 0;
+                        // $window.alert("data not inserted");
                     }
                 },
                 function(response) {
@@ -66,8 +74,11 @@ myapp.controller("companyCtrl", ["$scope", "$http", function($scope, $http) {
             .then(function(response) {
                     if (response) {
                         refresh();
+                        $window.alert("data deleted ....");
                         console.log("data deleted ....");
-                        //  $scope.alert("deleted id="+id);
+
+                    } else {
+
                     }
                 },
                 function(response) {
@@ -75,19 +86,28 @@ myapp.controller("companyCtrl", ["$scope", "$http", function($scope, $http) {
                 })
     }
 
+    var editflag = 0;
     //edit
     $scope.edit = function(id) {
         _id = id;
+        checkedit = 0;
         $http.get("/company/" + id)
             .then(function(response) {
                     if (response) {
                         $scope.userlist = response;
                         console.log("data edit  ....");
+                        //  $window.alert("data edited ....");
+                        $scope.editflag = 1;
                         //  $scope.alert("deleted id="+id);
+                    } else {
+                        $scope.status = response.status;
+                        //   $window.alert("Id not found ...." + $scope.status);
                     }
                     //console.log("data=" + response);
                     $scope.companyName = response.data.companyName;
                     $scope.RegistartionNo = response.data.companyInfo.RegistartionNo;
+                    $scope.editflag = 1;
+
                     // $scope.RegistartionNo = response.data.RegistartionNo;
                     //  $scope.update(id);
                     //console.log("add=" + $scope.address);
@@ -103,6 +123,7 @@ myapp.controller("companyCtrl", ["$scope", "$http", function($scope, $http) {
     //update
     $scope.update = function(companyName, RegistartionNo) {
         console.log("id in cmp to update=" + _id);
+        console.log("checkedit=" + checkedit);
         //console.log("name in ctrl to update=" + $scope.firstName);
         var inputValue = {
             "companyName": companyName,
@@ -135,10 +156,31 @@ myapp.controller("companyCtrl", ["$scope", "$http", function($scope, $http) {
                         // console.log("resp" + response);
                         $scope.msg = "data posted ...."
                         refresh();
+                        $window.alert("company deactivated....");
                     }
                 },
                 function(response) {
                     $scope.msg = "error occur";
                 })
     }
+
+    //activate
+    //update
+    $scope.activate = function(id) {
+        console.log("id in login to activate=" + id);
+        //console.log("name in ctrl to update=" + $scope.firstName);
+        $http.put("/companys/" + id)
+            .then(function(response) {
+                    if (response) {
+                        // console.log("resp" + response);
+                        $scope.msg = "data posted ...."
+                        refresh();
+                        $window.alert("company activated....");
+                    }
+                },
+                function(response) {
+                    $scope.msg = "error occur";
+                })
+    }
+
 }])
