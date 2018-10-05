@@ -94,6 +94,7 @@ myapp.controller("companyCtrl", ["$scope", "$http", '$window', function($scope, 
         $http.get("/company/" + id)
             .then(function(response) {
                     if (response) {
+                        refresh();
                         $scope.userlist = response;
                         console.log("data edit  ....");
                         //  $window.alert("data edited ....");
@@ -117,7 +118,7 @@ myapp.controller("companyCtrl", ["$scope", "$http", '$window', function($scope, 
                 function(response) {
                     $scope.msg = "error occur";
                 })
-        $scope.update();
+            // $scope.update();
     }
 
     //update
@@ -136,6 +137,7 @@ myapp.controller("companyCtrl", ["$scope", "$http", '$window', function($scope, 
             .then(function(response) {
                     if (response) {
                         console.log("resp" + response);
+                        $scope.companyName = "";
                         $scope.msg = "data posted ...."
                         refresh();
                     }
@@ -147,40 +149,80 @@ myapp.controller("companyCtrl", ["$scope", "$http", '$window', function($scope, 
 
     //deactivate
     //update
-    $scope.deactivate = function(id) {
+    $scope.status = null;
+    $scope.deactivate = function(id, status) {
         console.log("id in login to deactivate=" + id);
+        console.log("status flag in deactivate=" + status);
         //console.log("name in ctrl to update=" + $scope.firstName);
-        $http.put("/company1/" + id)
-            .then(function(response) {
-                    if (response) {
-                        // console.log("resp" + response);
-                        $scope.msg = "data posted ...."
-                        refresh();
-                        $window.alert("company deactivated....");
-                    }
-                },
-                function(response) {
-                    $scope.msg = "error occur";
-                })
+        if (status == "statusflag") {
+            //console.log("status flag in deactivate=" + statusflag);
+            var inputValue = {
+
+                "status": "deactivated"
+            };
+            $http.put("/company1/" + id, inputValue)
+                .then(function(response) {
+                        if (response) {
+                            // console.log("resp" + response);
+                            $scope.msg = "data posted ...."
+                            refresh();
+                        }
+                    },
+                    function(response) {
+                        $scope.msg = "error occur";
+                    })
+
+        }
+        if (status == "statusflag1") {
+            /// console.log("statusflag1 in if cond=" + statusflag1);
+            var inputValue = {
+                "status": "activated"
+            };
+            $http.put("/company1/" + id, inputValue)
+                .then(function(response) {
+                        if (response) {
+                            // console.log("resp" + response);
+                            $scope.msg = "data posted ...."
+                            refresh();
+                        }
+                    },
+                    function(response) {
+                        $scope.msg = "error occur";
+                    })
+        }
+
+
+        // $http.put("/company1/" + id)
+        //     .then(function(response) {
+        //             if (response) {
+        //                 // console.log("resp" + response);
+        //                 $scope.msg = "data posted ...."
+        //                 refresh();
+        //                 $window.alert("company deactivated....");
+        //             }
+        //         },
+        //         function(response) {
+        //             $scope.msg = "error occur";
+        //         })
     }
 
-    //activate
-    //update
-    $scope.activate = function(id) {
-        console.log("id in login to activate=" + id);
-        //console.log("name in ctrl to update=" + $scope.firstName);
-        $http.put("/companys/" + id)
-            .then(function(response) {
-                    if (response) {
-                        // console.log("resp" + response);
-                        $scope.msg = "data posted ...."
-                        refresh();
-                        $window.alert("company activated....");
-                    }
-                },
-                function(response) {
-                    $scope.msg = "error occur";
-                })
-    }
+    // //activate
+    // //update
+    // $scope.activate = function(id) {
+    //     console.log("id in login to activate=" + id);
+    //     //console.log("name in ctrl to update=" + $scope.firstName);
+    //     $http.put("/companys/" + id)
+    //         .then(function(response) {
+    //                 if (response) {
+    //                     // console.log("resp" + response);
+    //                     $scope.msg = "data posted ...."
+    //                     refresh();
+    //                     $window.alert("company activated....");
+    //                 }
+    //             },
+    //             function(response) {
+    //                 $scope.msg = "error occur";
+    //             })
+    // }
 
 }])

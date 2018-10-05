@@ -148,11 +148,10 @@ myapp.controller("loginCtrl", ["$scope", "$http", '$location', '$window', functi
         $http.put("/user/" + _id, inputValue)
             .then(function(response) {
                     if (response) {
-                        refresh();
+
                         console.log("resp" + response);
-                        $scope.msg = "data posted ...."
-
-
+                        $scope.msg = "data posted ....";
+                        refresh();
                     }
                 },
                 function(response) {
@@ -162,21 +161,70 @@ myapp.controller("loginCtrl", ["$scope", "$http", '$location', '$window', functi
 
     //deactivate
     //update
-    $scope.deactivate = function(id) {
+    $scope.status = null;
+    // $scope.statusflag1 = null;
+    $scope.deactivate = function(id, status) {
+        console.log("status flag in deactivate=" + status);
+        // console.log("status flag 1=" + status);
         console.log("id in login to deactivate=" + id);
         //console.log("name in ctrl to update=" + $scope.firstName);
-        $http.put("/user1/" + id)
-            .then(function(response) {
-                    if (response) {
-                        // console.log("resp" + response);
-                        $scope.msg = "data posted ...."
-                        refresh();
-                    }
-                },
-                function(response) {
-                    $scope.msg = "error occur";
-                })
+
+        if (status == "statusflag") {
+            //console.log("status flag in deactivate=" + statusflag);
+            var inputValue = {
+
+                "status": "deactivated"
+            };
+            $http.put("/user1/" + id, inputValue)
+                .then(function(response) {
+                        if (response) {
+                            // console.log("resp" + response);
+                            $scope.msg = "data posted ...."
+                            refresh();
+                        }
+                    },
+                    function(response) {
+                        $scope.msg = "error occur";
+                    })
+
+        }
+        if (status == "statusflag1") {
+            /// console.log("statusflag1 in if cond=" + statusflag1);
+            var inputValue = {
+                "status": "activated"
+            };
+            $http.put("/user1/" + id, inputValue)
+                .then(function(response) {
+                        if (response) {
+                            // console.log("resp" + response);
+                            $scope.msg = "data posted ...."
+                            refresh();
+                        }
+                    },
+                    function(response) {
+                        $scope.msg = "error occur";
+                    })
+        }
+
     }
+
+    //     // //activate
+    //     // //update
+    //   $scope.activate = function(id) {
+    //             console.log("id in login to deactivate=" + id);
+    //             //console.log("name in ctrl to update=" + $scope.firstName);
+    //             $http.put("/userss/" + id)
+    //                .then(function(response) {
+    //                      if (response) {
+    //                           // console.log("resp" + response);
+    //                            $scope.msg = "data posted ...."
+    //                             refresh();
+    //                        }
+    //                    },
+    //                   function(response) {
+    //                        $scope.msg = "error occur";
+    //                    })
+    //       }
 
     //login
     $scope.submit = function(email, password) {

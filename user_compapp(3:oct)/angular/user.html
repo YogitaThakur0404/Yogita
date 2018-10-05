@@ -3,164 +3,117 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular-animate.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <script src="module.js"></script>
 </head>
 
 <body ng-controller="loginCtrl">
     <center>
-
         <div class="container">
-            <div class="col-sm-8 col-sm-offset-2">
-                <form role="form" class="form-horizontal" name="form1" novalidate>
-                    <fieldset>
-
-                        <div class="form-group"><label class="control-label col-sm-6"> firstName:</label>
-                            <div class="col-sm-2"> <input placeholder="firstName" name="firstName" ng-minlength="3" ng-maxlength="25" ng-model="firstName" type="text" autofocus="" ng-class="{'has-error': form1.firstName.$error.required}" ng-pattern="/^[a-zA-Z]+$/" required
-                                /></div>
-                            <p ng-show="form1.firstName.$invalid && !form1.firstName.$pristine" class="label label-danger">Your firstName is required(eg:abcd).</p>
+            <!-- <div class="col-sm-8 col-sm-offset-2"> -->
+            <form role="form" class="form-horizontal" name="form1" novalidate>
+                <fieldset>
+                    <div class="form-group" ng-class="{'has-error': form1.firstName.$error.required}"><label class="control-label col-sm-6"> firstName:</label>
+                        <div class="col-sm-2"> <input class="form-control" placeholder="firstName" name="firstName" ng-minlength="3" ng-maxlength="25" ng-model="firstName" type="text" autofocus="" ng-pattern="/^[a-zA-Z]+$/" required />
+                            <p ng-show="form1.firstName.$error.required && (form1.firstName.$dirty || submitted)" class="label label-danger">Your firstName is required(eg:abcd).</p>
                             <p ng-show="form1.firstName.$error.minlength" class="label label-danger">It is too short min length is 3.</p>
                             <p ng-show="form1.firstName.$error.maxlength" class="label label-danger">It is too long max length is 25.</p>
+                            <p ng-show="form1.firstName.$error.pattern" class="label label-danger">please enter char[a-z/A-Z] only.</span>
                         </div>
-
-                        <div class="form-group"><label>lastName:</label>
-                            <input placeholder="lastName" name="lastName" ng-minlength="3" ng-maxlength="25" ng-model="lastName" type="text" autofocus="" ng-class="{'has-error': form1.lastName.$error.required}" ng-pattern="/^[a-zA-Z]+$/" required />
-                            <p ng-show="form1.lastName.$invalid && !form1.lastName.$pristine" class="label label-danger">Your lastName is required.</p>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': form1.lastName.$error.required}"><label class="control-label col-sm-6">lastName:</label>
+                        <div class="col-sm-2"> <input class="form-control" placeholder="lastName" name="lastName" ng-minlength="3" ng-maxlength="25" ng-model="lastName" type="text" autofocus="" ng-pattern="/^[a-zA-Z]+$/" required />
+                            <p ng-show="form1.lastName.$error.required && (form1.lastName.$dirty || submitted)" class="label label-danger">Your lastName is required.</p>
                             <p ng-show="form1.lastName.$error.minlength" class="label label-danger">It is too short min length is 3..</p>
                             <p ng-show="form1.lastName.$error.maxlength" class="label label-danger">It is too long max length is 25.</p>
-                        </div>
+                            <p ng-show="form1.lastName.$error.pattern" class="label label-danger">please enter char[a-z/A-Z] only eg:verma.</span>
 
-                        <div class="form-group" for="email" ng-hide="editflag">
-                            <label>   email:</label>
-                            <input placeholder="E-Mail" id="email" name="email" ng-model="email" type="email" value="" ng-class="{'has-error': registerForm.email.$error.pattern}" ng-pattern="/^\w+([\.-]?\w+)*@[a-zA-Z](?:[a-zA-Z]{0,10}[a-zA-Z])*(\.\w{2,3})+$/" required />
-                            <br> <span ng-show="form1.email.$error.required" class="label label-danger">Email is required.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': form1.email.$error.required}" for="email" ng-hide="editflag">
+                        <label class="control-label col-sm-6">email:</label>
+                        <div class="col-sm-2"> <input class="form-control" placeholder="E-Mail" id="email" name="email" ng-model="email" type="email" value="" ng-pattern="/^\w+([\.-]?\w+)*@[a-zA-Z](?:[a-zA-Z]{0,10}[a-zA-Z])*(\.\w{2,3})+$/" required />
+                            <br> <span ng-show="form1.email.$error.required&& (form1.email.$dirty || submitted)" class="label label-danger">Email is required.</span>
                             <span ng-show="form1.email.$error.email" class="label label-danger">Invalid Email address must include (@,.) </span>
-                            <span ng-show="!form1.email.errors.pattern" class="label label-danger">Must be a valid email pattern!</span>
-                            <!-- <ng-messages role="alert" ng-if="form1.email.$touched " for="form1.email.$error">
-                    <span ng-message="pattern">Please enter valid email format only(abc@gmail.com)</span>
-                </ng-messages> -->
-                        </div>
+                            <span ng-show="form1.email.$error.pattern" class="label label-danger">Must be a valid email pattern eg:abc@gmail.com!</span>
 
-                        <div class="form-group"><label>address:</label>
-                            <input placeholder="address" name="address" ng-model="address" type="text" autofocus="" ng-class="{'has-error': form1.address.$error.required}" required />
-                            <p ng-show="form1.address.$invalid && !form1.address.$pristine" class="label label-danger">Your address is required.</p>
                         </div>
-
-                        <div class="form-group"><label>city:</label>
-                            <input placeholder="city" name="city" ng-model="city" type="text" autofocus="" ng-class="{'has-error': form1.city.$error.required}" ng-pattern="/^[a-zA-Z]+$/" required />
-                            <p ng-show="form1.city.$invalid && !form1.city.$pristine" class="label label-danger">Your city is required.</p>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': form1.address.$error.required}"><label class="control-label col-sm-6">address:</label>
+                        <div class="col-sm-2"> <input class="form-control" placeholder="address" name="address" ng-model="address" type="text" autofocus="" required />
+                            <p ng-show="form1.address.$error.required&& (form1.address.$dirty || submitted)" class="label label-danger">Your address is required.</p>
                         </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error':form1.city.$error.required}"><label class="control-label col-sm-6">city:</label>
+                        <div class="col-sm-2"> <input class="form-control" placeholder="city" name="city" ng-model="city" type="text" autofocus="" ng-pattern="/^[a-zA-Z]+$/" required />
+                            <p ng-show="form1.city.$error.required&& (form1.city.$dirty || submitted)" class="label label-danger">Your city is required.</p>
+                            <span ng-show="form1.city.$error.pattern" class="label label-danger">Must be a valid city name ex:maharashtra</span>
 
-                        <div class="form-group"><label>password:</label>
-                            <input placeholder="Password" ng-minlength="8" ng-model="password" ng-maxlength="12" name="password" type="password" value="" autocomplete="off">
-                            <span ng-show="form1.password.$invalid && !form1.password.$pristine" class="help-block">Your password is required.</span>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': form1.password.$error.required}"><label class="control-label col-sm-6">password:</label>
+                        <div class="col-sm-2"> <input class="form-control" placeholder="Password" ng-minlength="8" ng-model="password" ng-maxlength="12" name="password" type="password" value="" autocomplete="off" required>
+                            <span ng-show="form1.password.$error.required&& (form1.password.$dirty || submitted)" class="help-block">Your password is required.</span>
                             <span ng-show="form1.password.$error.minlength" class="label label-danger">It is too short min length is 8.</span>
                             <span ng-show="form1.password.$error.maxlength" class="label label-danger">It is too large max length is 12.</span>
                         </div>
-                        <!--   <div>  status: <br> <input type="text" ng-model="status" ng-bind="status"></div> <br>  -->
+                    </div>
+                    <!--   <div>  status: <br> <input type="text" ng-model="status" ng-bind="status"></div> <br>  -->
 
-                        <br> <input type="submit" ng-hide="editflag" ng-disabled="!form1.$valid" class="btn btn-primary" ng-click="submitData(firstName,lastName,email,address,city,password)">
-                        <input type="button" ng-disabled="!form1.$valid" name="update" class="btn btn-primary" value="update" ng-click="update(firstName,lastName,email,address,city,password)">
+                    <input type="submit" ng-hide="editflag" ng-disabled="!form1.$valid" class="btn btn-primary" ng-click="submitData(firstName,lastName,email,address,city,password)">
+                    <input type="button" ng-disabled="!form1.$valid" name="update" class="btn btn-primary" value="update" ng-click="update(firstName,lastName,email,address,city,password)">
 
-                </form>
-            </div>
+            </form>
+        </div>
         </div>
     </center>
-    <!--<div> 
-            <form role="form" name="form1">
-            <fieldset>
-                <div class="form-group">
-                    firstName: <br><input type="text" class="form-control" name="firstName" ng-model="firstName" ng-bind="firstName"> <br>
-                     <p ng-show="form1.firstName.$invalid && !form1.firstName.$pristine" class="help-block">Your firstName is required.</p>
-                <p ng-show="form1.firstName.$error.minlength" class="help-block">It is too short.</p> 
-                </div>
-                <div>
-                    lastName: <br><input type="text" name="lastName" ng-model="lastName" ng-bind="lastName"> <br>
-
-                    <p ng-show="form1.lastName.$invalid && !form1.lastName.$pristine" class="help-block">Your lastName is required.</p>
-                    <p ng-show="form1.lastName.$error.minlength" class="help-block">It is too short.</p>
-
-                </div>
-                <div>
-                    email: <br> <input type="email" name="email" ng-model="email" ng-bind="email"> <br>
-                    <span ng-show="form1.email.$error.required">Email is required.</span>
-                    <span ng-show="form1.email.$error.email">Invalid Email address.</span>
-                </div>
-                <div>
-                    address: <br><input type="text" name="address" ng-model="address" ng-bind="address"> <br>
-                    <p ng-show="form1.address.$invalid && !form1.address.$pristine" class="help-block">Your address is required.</p>
-
-                </div>
-                <div>
-
-                    city: <br><input type="text" name="city" ng-model="city" ng-bind="userInfo.city"> <br>
-                    <p ng-show="form1.city.$invalid && !form1.city.$pristine" class="help-block">Your city is required.</p>
-
-                </div>
-                <div>
-
-                    password: <br> <input type="password" name="password" ng-model="password" ng-bind="password"> <br>
-                    <span ng-show="form1.password.$invalid && !form1.password.$pristine" class="help-block">Your password is required.</span>
-                    <span ng-show="form1.password.$error.minlength" class="help-block">It is too short.</span>
-                    <span ng-show="form1.password.$error.maxlength" class="help-block">It is too large.</span>
-                </div>
-                 <div>
-            status: <br> <input type="text" ng-model="status" ng-bind="status"></div> <br> 
-
-
-                <br> <input type="submit" ng-disabled="!form1.$valid" class="btn btn-primary" ng-click="submitData(firstName,lastName,email,address,city,password,status)">
-
-
-
-                <input type="button" ng-disabled="!form1.$valid" name="update" class="btn btn-primary" value="update" ng-click="update(firstName,lastName,email,address,city,password)">
-            </fieldset>
-        </form>
-    </div> -->
-    <br>
-
 
     <!-- 
     table to show users data -->
-    <table border=2 align="center">
-        <center>
-            <h1>user Data</h1>
-        </center>
-        <thead>
-            <tr>
-                <th>firstName</th>
-                <th>lastName</th>
-                <th>email</th>
-                <th>address</th>
-                <th>city</th>
-                <th>status</th>
-                <th colspan="3">options</th>
+    <div class="container">
+        <table class="table table-striped" border=1 align="center">
 
-            </tr>
-        </thead>
-        <tbody>
+            <center>
+                <h1>user Data</h1>
+            </center>
+            <thead>
+                <tr class="alert alert-info">
+                    <th>firstName</th>
+                    <th>lastName</th>
+                    <th>email</th>
+                    <th>address</th>
+                    <th>city</th>
+                    <th>status</th>
+                    <th colspan="4">options</th>
 
-            <tr ng-repeat="user in userlist">
-                <td>{{user.firstName}}</td>
-                <td>{{user.lastName}}</td>
-                <td>{{user.email}}</td>
-                <td>{{user.userInfo.address}}</td>
-                <td>{{user.userInfo.city}}</td>
-                <td>{{user.status}}</td>
-                <td><button class="btn btn-danger" ng-click="remove(user._id)"><span class="glyphicon glyphicon-remove"></span></button></td>
-                <td><button class="btn btn-warning" ng-click="edit(user._id)"><span class="glyphicon glyphicon-pencil"></span></button></td>
-                <td><button class="btn btn-warning" ng-click="deactivate(user._id)"><span class="glyphicon glyphicon-trash">deactivate</span></button></td>
-            </tr>
-        </tbody>
-    </table>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr ng-repeat="user in userlist">
+                    <td>{{user.firstName}}</td>
+                    <td>{{user.lastName}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.userInfo.address}}</td>
+                    <td>{{user.userInfo.city}}</td>
+                    <td>{{user.status}}</td>
+                    <td><button ng-click="remove(user._id)"><span class="glyphicon glyphicon-remove">remove</span></button></td>
+                    <td><button ng-click="edit(user._id)"><span class="glyphicon glyphicon-pencil">edit</span></button></td>
+                    <td><button ng-click="deactivate(user._id,'statusflag')"><span class="glyphicon glyphicon-pencil">deactivate</span></button></td>
+                    <td><button ng-click="deactivate(user._id,'statusflag1')"><span class="glyphicon glyphicon-pencil">activate</span></button></td>
+
+                </tr>
+            </tbody>
+        </table>
 
     </div>
-    </table><br>
     <br>
-
-    <center> <button class="text-white" class="btn btn-primary"><a href="#!company" >company</a></button></center>
+    <center> <button class="text-white" class="btn btn-warning"><a href="#!company" >company</a></button></center>
 
     <script src="controllers/loginCtrl.js"></script>
 

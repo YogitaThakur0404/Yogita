@@ -12,68 +12,76 @@
 </head>
 
 <body ng-controller="companyCtrl">
-    <center>
-        <h3>Company data</h3>
-    </center>
-    <form name="form1" class="form-horizontal" novalidate>
+    <div class="container">
         <center>
-            <br>
-            <div class="form-group">
-                <label class="control-label col-sm-6"> companyName:<br></label>
-                <div class="col-sm-2">
-                    <input type="text" class="form-control" name="companyName" ng-class="{'has-error': form1.companyName.$error.required}" ng-pattern="/([a-zA-Z0-9](_|-| )[a-zA-Z0-9])*/" ng-model="companyName" ng-minlength="3" ng-maxlength="25" ng-required="true">
-                    <p ng-show="form1.companyName.$invalid && !form1.companyName.$pristine" class="label label-danger">Your companyName is required.</p>
-                    <p ng-show="form1.companyName.$error.minlength" class="label label-danger">It is too short: must be greater than 3 chars.</p>
-                    <p ng-show="form1.companyName.$error.maxlength" class="label label-danger">It is too long: can not be greater than 25 chars.</p>
-                    <br>
-                </div>
-            </div>
+            <h3>Company data</h3>
+        </center>
+        <form name="form1" class="form-horizontal" novalidate>
+            <center>
+                <br>
+                <div class="form-group" ng-class="{'has-error': form1.companyName.$error.required}">
+                    <label class="control-label col-sm-6"> companyName:<br></label>
+                    <div class="col-sm-2">
+                        <input type="text" class="form-control" name="companyName" ng-pattern="/([a-zA-Z0-9](_|-| )[a-zA-Z0-9])*/" ng-model="companyName" ng-minlength="3" ng-maxlength="25" ng-required="true">
+                        <p ng-show="form1.companyName.$error.required && (form1.companyName.$dirty )" class="label label-danger">Your companyName is required.</p>
+                        <p ng-show="form1.companyName.$error.minlength" class="label label-danger">It is too short: must be greater than 3 chars.</p>
+                        <p ng-show="form1.companyName.$error.maxlength" class="label label-danger">It is too long: can not be greater than 25 chars.</p>
+                        <p ng-show="form1.companyName.$error.pattern" class="label label-danger">please enter char[a-z/A-Z/0-9] only.</span>
 
-            <div ng-hide="editflag" class="form-group">
-                <label class="control-label col-sm-6"> RegistartionNo:</label><br>
-                <div class="col-sm-2"> <input type="number" name="RegistartionNo" ng-model="RegistartionNo" class="form-control" ng-minlength="3" ng-class="{'has-error': form1.RegistartionNo.$error.required}" ng-required="true"><br>
-                    <p ng-show="form1.RegistartionNo.$invalid && !form1.RegistartionNo.$pristine" class="label label-danger">Your RegistartionNo is required.</p>
-                    <p ng-show="form1.RegistartionNo.$error.minlength" class="label label-danger">It is too short must be greater than 3.</p>
+                    </div>
                 </div>
-            </div>
-            <!-- <div>
+
+                <div ng-hide="editflag" class="form-group" ng-class="{'has-error': form1.RegistartionNo.$error.required}">
+                    <label class="control-label col-sm-6"> RegistartionNo:</label><br>
+                    <div class="col-sm-2"> <input type="number" name="RegistartionNo" ng-model="RegistartionNo" class="form-control" ng-minlength="3" ng-required="true"><br>
+                        <p ng-show="form1.RegistartionNo.$error.required && (form1.RegistartionNo.$dirty || submitted)" class="label label-danger">Your RegistartionNo is required eg:123456.</p>
+                        <p ng-show="form1.RegistartionNo.$error.minlength" class="label label-danger">It is too short must be greater than 3.</p>
+                    </div>
+                </div>
+                <!-- <div>
             status: <br><input type="text" ng-model="status" ng-bind="status"><br>
         </div> 
     ng-if="checkedit==1" ng-show="update" 
     -->
-            <br>
-            <div class="col-md-12">
-                <input type="submit" ng-hide="editflag" ng-disabled="!form1.$valid" class="btn btn-primary" ng-click="submitData(companyName,RegistartionNo)">
-                <input type="button" ng-disabled="!form1.$valid" class=" btn btn-primary " name="update " value="update " ng-click="update(companyName,RegistartionNo) ">
-            </div>
-    </form>
-    <div class="container">
-        <table class="table table-striped" border=1>
-            <h1>user Data</h1>
-            <thead>
-                <tr>
-                    <th>companyName</th>
-                    <th>RegistartionNo</th>
-                    <th>status</th>
-                    <th colspan="4">options</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="cmp in cmplist ">
-                    <td>{{cmp.companyName}}</td>
-                    <td>{{cmp.companyInfo.RegistartionNo}}</td>
-                    <td>{{cmp.status}}</td>
-                    <td><button class="btn btn-danger " ng-click="remove(cmp._id) "><span class="glyphicon glyphicon-remove ">Remove</span></button></td>
-                    <td><button class="btn btn-warning " ng-click="edit(cmp._id) "><span class="glyphicon glyphicon-pencil ">Edit</span></button></td>
-                    <td><button class="btn btn-warning " ng-click="deactivate(cmp._id) "><span class="glyphicon glyphicon-trash ">deactivate</span></button></td>
-                    <td><button class="btn btn-warning " ng-click="activate(cmp._id) "><span class="glyphicon glyphicon-pencil ">activate</span></button></td>
-                </tr>
-            </tbody>
-        </table>
 
+                <div class="col-md-12">
+                    <input type="submit" ng-hide="editflag" ng-disabled="!form1.$valid" class="btn btn-primary" ng-click="submitData(companyName,RegistartionNo)">
+                    <input type="button" ng-disabled="!form1.$valid" class=" btn btn-primary " name="update " value="update " ng-click="update(companyName,RegistartionNo) ">
+                </div>
+            </center>
+        </form>
+    </div>
+
+    <div class="container">
+        <center>
+            <table class="table table-striped" border=1>
+                <!-- <div class="alert alert-info"> -->
+                <h1>Company Data</h1>
+                <!-- </div> -->
+                <thead>
+                    <tr class="alert alert-info">
+                        <th>companyName</th>
+                        <th>RegistartionNo</th>
+                        <th>status</th>
+                        <th colspan="4">options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="cmp in cmplist ">
+                        <td>{{cmp.companyName}}</td>
+                        <td>{{cmp.companyInfo.RegistartionNo}}</td>
+                        <td>{{cmp.status}}</td>
+                        <td><button ng-click="remove(cmp._id) "><span class="glyphicon glyphicon-remove ">Remove</span></button></td>
+                        <td><button ng-click="edit(cmp._id) "><span class="glyphicon glyphicon-pencil ">Edit</span></button></td>
+                        <td><button ng-click="deactivate(cmp._id,'statusflag') "><span class="glyphicon glyphicon-trash ">deactivate</span></button></td>
+                        <td><button ng-click="deactivate(cmp._id,'statusflag1') "><span class="glyphicon glyphicon-pencil ">activate</span></button></td>
+                    </tr>
+                </tbody>
+            </table>
     </div>
     </table><br>
-    <button class="btn btn-warning">  <a href="#!user ">user</a></button>
+    </center>
+    <center><button class="btn btn-warning">  <a href="#!user ">user</a></button>
     </center>
     <script src="controllers/companyCtrl.js "></script>
 </body>
