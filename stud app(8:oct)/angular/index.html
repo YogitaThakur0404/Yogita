@@ -1,0 +1,52 @@
+<html ng-app="myapp">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="module.js"></script>
+</head>
+
+<body>
+    <div class="panel panel-primary">
+
+        <div class="panel-heading" class="control-label col-xs-2">
+            <center>
+                <h4>School mgmt app</h4>
+            </center>
+        </div>
+
+
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#/Summary">College Mgmt portal</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li ng-class="{ active: isActive('/Summary') }">
+                            <a href="#/login">student Login</a>
+                        </li>
+                        <li ng-class="{ active: isActive('/Production') }">
+                            <a href="#/Production">Contact Us</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <div ng-view class="jumbotron"></div>
+        </div>
+    </div>
+
+
+    <script src="controllers/studentCtrl.js"></script>
+    <script src="controllers/adminCtrl.js"></script>
+</body>
+
+</html>

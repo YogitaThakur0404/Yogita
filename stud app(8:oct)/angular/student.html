@@ -1,0 +1,121 @@
+<html ng-app="myapp">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="module.js"></script>
+</head>
+
+<body ng-controller="studentCtrl">
+    <center>
+        <div class="container">
+            <!-- <div class="col-sm-8 col-sm-offset-2"> -->
+            <form role="form" class="form-horizontal" name="form1" novalidate>
+                <fieldset>
+                    <div class="form-group" ng-class="{'has-error': form1.firstName.$error.required}"><label class="control-label col-sm-6"> firstName:</label>
+                        <div class="col-sm-2"> <input class="form-control" placeholder="firstName" name="firstName" ng-minlength="3" ng-maxlength="25" ng-model="firstName" type="text" autofocus="" ng-pattern="/^[a-zA-Z]+$/" required />
+                            <p ng-show="form1.firstName.$error.required && (form1.firstName.$dirty || submitted)" class="label label-danger">Your firstName is required(eg:abcd).</p>
+                            <p ng-show="form1.firstName.$error.minlength" class="label label-danger">It is too short min length is 3.</p>
+                            <p ng-show="form1.firstName.$error.maxlength" class="label label-danger">It is too long max length is 25.</p>
+                            <p ng-show="form1.firstName.$error.pattern" class="label label-danger">please enter char[a-z/A-Z] only.</span>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': form1.lastName.$error.required}"><label class="control-label col-sm-6">lastName:</label>
+                        <div class="col-sm-2"> <input class="form-control" placeholder="lastName" name="lastName" ng-minlength="3" ng-maxlength="25" ng-model="lastName" type="text" autofocus="" ng-pattern="/^[a-zA-Z]+$/" required />
+                            <p ng-show="form1.lastName.$error.required && (form1.lastName.$dirty || submitted)" class="label label-danger">Your lastName is required.</p>
+                            <p ng-show="form1.lastName.$error.minlength" class="label label-danger">It is too short min length is 3..</p>
+                            <p ng-show="form1.lastName.$error.maxlength" class="label label-danger">It is too long max length is 25.</p>
+                            <p ng-show="form1.lastName.$error.pattern" class="label label-danger">please enter char[a-z/A-Z] only eg:verma.</span>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': form1.email.$error.required}" for="email" ng-hide="editflag">
+                        <label class="control-label col-sm-6">email:</label>
+                        <div class="col-sm-2"> <input class="form-control" placeholder="E-Mail" id="email" name="email" ng-model="email" type="email" value="" ng-pattern="/^\w+([\.-]?\w+)*@[a-zA-Z](?:[a-zA-Z]{0,10}[a-zA-Z])*(\.\w{2,3})+$/" required />
+                            <br> <span ng-show="form1.email.$error.required&& (form1.email.$dirty || submitted)" class="label label-danger">Email is required.</span>
+                            <span ng-show="form1.email.$error.email" class="label label-danger">Invalid Email address must include (@,.) </span>
+                            <span ng-show="form1.email.$error.pattern" class="label label-danger">Must be a valid email pattern eg:abc@gmail.com!</span>
+
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': form1.address.$error.required}"><label class="control-label col-sm-6">address:</label>
+                        <div class="col-sm-2"> <input class="form-control" placeholder="address" name="address" ng-model="address" type="text" autofocus="" required />
+                            <p ng-show="form1.address.$error.required&& (form1.address.$dirty || submitted)" class="label label-danger">Your address is required.</p>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error':form1.city.$error.required}"><label class="control-label col-sm-6">city:</label>
+                        <div class="col-sm-2"> <input class="form-control" placeholder="city" name="city" ng-model="city" type="text" autofocus="" ng-pattern="/^[a-zA-Z]+$/" required />
+                            <p ng-show="form1.city.$error.required&& (form1.city.$dirty || submitted)" class="label label-danger">Your city is required.</p>
+                            <span ng-show="form1.city.$error.pattern" class="label label-danger">Must be a valid city name ex:maharashtra</span>
+
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': form1.password.$error.required}"><label class="control-label col-sm-6">password:</label>
+                        <div class="col-sm-2"> <input class="form-control" placeholder="Password" ng-minlength="8" ng-model="password" ng-maxlength="12" name="password" type="password" value="" autocomplete="off" required>
+                            <span ng-show="form1.password.$error.required&& (form1.password.$dirty || submitted)" class="help-block">Your password is required.</span>
+                            <span ng-show="form1.password.$error.minlength" class="label label-danger">It is too short min length is 8.</span>
+                            <span ng-show="form1.password.$error.maxlength" class="label label-danger">It is too large max length is 12.</span>
+                        </div>
+                    </div>
+                    <!--   <div>  status: <br> <input type="text" ng-model="status" ng-bind="status"></div> <br>  -->
+
+                    <input type="submit" ng-hide="editflag" ng-disabled="!form1.$valid" class="btn btn-primary" ng-click="submitData(firstName,lastName,email,address,city,password)">
+                    <input type="button" ng-hide="postflag" ng-disabled="!form1.$valid" name="update" class="btn btn-primary" value="update" ng-click="update(firstName,lastName,email,address,city,password)">
+
+            </form>
+        </div>
+        </div>
+    </center>
+
+    <!-- 
+    table to show users data -->
+    <div class="container">
+        <table class="table table-striped" border=1 align="center">
+
+            <center>
+                <h1>user Data</h1>
+            </center>
+            <thead>
+                <tr class="alert alert-info">
+                    <th>firstName</th>
+                    <th>lastName</th>
+                    <th>email</th>
+                    <th>address</th>
+                    <th>city</th>
+                    <th>status</th>
+                    <th colspan="4">options</th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr ng-repeat="stud in studlist">
+                    <td>{{stud.firstName}}</td>
+                    <td>{{stud.lastName}}</td>
+                    <td>{{stud.email}}</td>
+                    <td>{{stud.studentInfo.address}}</td>
+                    <td>{{stud.studentInfo.city}}</td>
+                    <td>{{stud.status}}</td>
+                    <td><button ng-click="remove(user._id)"><span class="glyphicon glyphicon-remove">remove</span></button></td>
+                    <td><button ng-click="edit(user._id)"><span class="glyphicon glyphicon-pencil">edit</span></button></td>
+                    <td><button ng-click="deactivate(user._id,'statusflag')"><span class="glyphicon glyphicon-pencil">deactivate</span></button></td>
+                    <td><button ng-click="deactivate(user._id,'statusflag1')"><span class="glyphicon glyphicon-pencil">activate</span></button></td>
+
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <br>
+
+    <script src="controllers/studentCtrl.js"></script>
+
+</body>
+
+</html>
