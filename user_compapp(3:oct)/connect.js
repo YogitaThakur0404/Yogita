@@ -99,10 +99,16 @@ app.use('/user', function(err, req, res, next) {
 app.get("/user", function(req, res) {
 
     console.log("inside connect.js user app")
-    users.find({}, function(err, docs) {
-        console.log(docs);
-        res.send(docs);
-    });
+    console.log("req.session.docs" + req.session.docs);
+
+    if (req.session.docs) {
+        res.redirect("/")
+    } else {
+        users.find({}, function(err, docs) {
+            console.log(docs);
+            res.send(docs);
+        });
+    }
 })
 
 //post
@@ -303,12 +309,18 @@ app.put("/user1/:_id", function(req, res) {
 
 //get
 app.get("/company", function(req, res) {
-
-    console.log("inside connect.js company app")
-    companys.find({}, function(err, docs) {
-        console.log("company=" + docs);
-        res.send(docs);
-    });
+    if (!req.body.email || !req.body.password) {
+        res.status("400");
+        res.send("login id required!");
+    } else {
+        console.log("inside connect.js company app")
+        companys.find({}, function(err, docs) {
+            req.session.docs = docs;
+            console.log(" get session=" + req.session.docs);
+            console.log("company=" + docs);
+            res.send(docs);
+        });
+    }
 })
 
 //post

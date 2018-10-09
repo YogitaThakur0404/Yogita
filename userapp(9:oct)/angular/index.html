@@ -1,0 +1,42 @@
+<html ng-app="myapp">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="module.js"></script>
+</head>
+
+<body>
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+            <center>
+                <h4>User app</h4>
+            </center>
+        </div>
+        <div class="panel-body">
+            <div ng-view></div>
+        </div>
+    </div>
+    <!-- <center>
+        <h3>user app</h3>
+    </center>
+
+
+    <div ng-view></div> -->
+
+    <!-- 
+    <a href="#"></a>
+    <a href="#!user">user</a>
+    <a href="#!company">company</a> -->
+
+    <script src="controllers/loginCtrl.js"></script>
+    <script src="controllers/companyCtrl.js"></script>
+</body>
+
+</html>
