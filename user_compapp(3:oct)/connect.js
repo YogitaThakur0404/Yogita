@@ -1,4 +1,8 @@
 var express = require('express');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+
+
 var app = express();
 //var router = express.Router();
 
@@ -10,6 +14,10 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 var query = require('querystring');
 app.use(express.static('public'));
+
+app.use(cookieParser());
+app.use(session({ secret: "Your secret key", cookie: { maxAge: 3600000 } }));
+
 
 var async = require('async');
 
@@ -26,26 +34,46 @@ app.use(express.static(__dirname + "/angular"));
 
 
 app.post("/", function(req, res) {
-
+    console.log("inside login connect.js user app")
     console.log("email=" + req.body.email);
     console.log("pwd=" + req.body.password);
 
-    console.log("inside login connect.js user app")
-    users.find({ $and: [{ "email": req.body.email }, { "password": req.body.password }] }, function(err, docs) {
-        console.log("leng=" + docs.length);
-        if (docs.length > 0) {
-            res.redirect('#!user');
-
-        } else {
-            var data = { "msg": "invalid credentials" };
-            console.log("invalid cond login=" + docs.length);
-            // res.send("/");
-            res.redirect('/');
-        }
-
-    });
+    if (!req.body.email || !req.body.password) {
+        res.status("400");
+        res.send("Invalid details!");
+    } else {
+        users.find({ $and: [{ "email": req.body.email }, { "password": req.body.password }] }, function(err, docs) {
+            console.log("leng=" + docs.length);
+            if (docs.length > 0) {
+                req.session.docs = docs;
+                console.log(" post session=" + req.session.docs);
+                res.redirect('#!user');
+            } else {
+                var data = { "msg": "invalid credentials" };
+                req.session.docs = docs;
+                console.log(" post fail session=" + req.session.docs);
+                console.log("invalid cond login=" + docs.length);
+                // res.send("/");
+                res.status("400");
+                res.redirect('/');
+            }
+        });
+    }
 })
 
+//logout
+app.get('/logout', function(req, res) {
+    req.session.destroy(function() {
+        console.log("user logged out.")
+    });
+    res.redirect('/');
+});
+
+app.use('/user', function(err, req, res, next) {
+    console.log(err);
+    //User should be authenticated! Redirect him to log in.
+    res.redirect('/');
+});
 
 // app.get("/user1", function(req, res) {
 
@@ -71,7 +99,7 @@ app.post("/", function(req, res) {
 app.get("/user", function(req, res) {
 
     console.log("inside connect.js user app")
-    users.find({ "status": "activated" }, function(err, docs) {
+    users.find({}, function(err, docs) {
         console.log(docs);
         res.send(docs);
     });
@@ -82,34 +110,38 @@ app.post("/user", function(req, res) {
     var user = req.body;
     console.log("user=" + user);
     console.log("user email =" + user.email);
+    if (!req.session.docs) {
+        return res.status(404).send();
+    } else {
+        users.findOne({ email: user.email }, function(err, existinguser) {
+            if (existinguser == null) {
+                console.log("email=" + req.body.email);
 
-    users.findOne({ email: user.email }, function(err, existinguser) {
-        if (existinguser == null) {
-            console.log("email=" + req.body.email);
+                var email = function ValidateEmail(mail) {
+                    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(req.body.email)) {
+                        var user1 = new users({ firstName: req.body.firstName, lastName: req.body.lastName, password: req.body.password, email: req.body.email, "userInfo.city": req.body.userInfo.city, "userInfo.address": req.body.userInfo.address, "status": "activated" });
+                        //firstName, lastName, email, address, city, password, status
+                        console.log("user1=" + user1);
+                        //creating new user data
+                        users.create(user1, function(err, data) {
+                            if (!data) {
+                                console.log("error in posting data");
+                                res.send("data not added");
+                            } else {
+                                // res.json(data);
+                                res.send("data inserted");
+                            }
+                        })
+                    } else {
+                        res.json(" invalid email_id  try other value");
+                    }
+                }();
+            } else {
+                res.json("already existing  email_id  try other value");
+            }
+        })
+    }
 
-            var email = function ValidateEmail(mail) {
-                if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(req.body.email)) {
-                    var user1 = new users({ firstName: req.body.firstName, lastName: req.body.lastName, password: req.body.password, email: req.body.email, "userInfo.city": req.body.userInfo.city, "userInfo.address": req.body.userInfo.address, "status": "activated" });
-                    //firstName, lastName, email, address, city, password, status
-                    console.log("user1=" + user1);
-                    //creating new user data
-                    users.create(user1, function(err, data) {
-                        if (!data) {
-                            console.log("error in posting data");
-                            res.send("data not added");
-                        } else {
-                            // res.json(data);
-                            res.send("data inserted");
-                        }
-                    })
-                } else {
-                    res.json(" invalid email_id  try other value");
-                }
-            }();
-        } else {
-            res.json("already existing  email_id  try other value");
-        }
-    })
 })
 
 
@@ -229,7 +261,7 @@ app.put("/user1/:_id", function(req, res) {
         if (existinguser == null) {
             res.send(" id not exist");
         } else {
-            users.updateOne({ _id: req.params._id }, { $set: { "status": "deactivated" } }, function(err, data) {
+            users.updateOne({ _id: req.params._id }, { $set: { "status": req.body.status } }, function(err, data) {
                 if (!data) {
                     console.log("not updated");
                     res.send("not updated");
@@ -243,6 +275,30 @@ app.put("/user1/:_id", function(req, res) {
 
 })
 
+// //activate
+// //activate put
+// app.put("/userss/:_id", function(req, res) {
+//         // var email = req.params.email;
+//         console.log("user: in connect for activate put ");
+//         console.log("id=" + req.params._id);
+
+//         users.findOne({ _id: req.params._id }, function(err, existinguser) {
+//             if (existinguser == null) {
+//                 res.send(" id not exist");
+//             } else {
+//                 users.updateOne({ _id: req.params._id }, { $set: { "status": "activated" } }, function(err, data) {
+//                     if (!data) {
+//                         console.log("not updated");
+//                         res.send("not updated");
+//                     } else {
+//                         res.send("data inserted");
+//                     }
+//                 })
+
+//             }
+//         })
+
+//     })
 ///// company
 
 //get
@@ -398,7 +454,7 @@ app.put("/company1/:_id", function(req, res) {
             if (existinguser == null) {
                 res.send(" id not exist");
             } else {
-                companys.updateOne({ _id: req.params._id }, { $set: { "status": "deactivated" } }, function(err, data) {
+                companys.updateOne({ _id: req.params._id }, { $set: { "status": req.body.status } }, function(err, data) {
                     if (!data) {
                         console.log("not updated");
                         res.send("not updated");
@@ -412,28 +468,28 @@ app.put("/company1/:_id", function(req, res) {
     })
     //activate
 
-//activate
-//activate put
-app.put("/companys/:_id", function(req, res) {
-    // var email = req.params.email;
-    console.log("in connect for activate put ");
-    console.log("id=" + req.params._id);
-    companys.findOne({ _id: req.params._id }, function(err, existinguser) {
-        if (existinguser == null) {
-            res.send(" id not exist");
-        } else {
-            companys.updateOne({ _id: req.params._id }, { $set: { "status": "activated" } }, function(err, data) {
-                if (!data) {
-                    console.log("not updated");
-                    res.send("not updated");
-                } else {
-                    res.send("data inserted");
-                }
-            })
+// //activate
+// //activate put
+// app.put("/companys/:_id", function(req, res) {
+//     // var email = req.params.email;
+//     console.log("in connect for activate put ");
+//     console.log("id=" + req.params._id);
+//     companys.findOne({ _id: req.params._id }, function(err, existinguser) {
+//         if (existinguser == null) {
+//             res.send(" id not exist");
+//         } else {
+//             companys.updateOne({ _id: req.params._id }, { $set: { "status": "activated" } }, function(err, data) {
+//                 if (!data) {
+//                     console.log("not updated");
+//                     res.send("not updated");
+//                 } else {
+//                     res.send("data inserted");
+//                 }
+//             })
 
-        }
-    })
-})
+//         }
+//     })
+// })
 
 var server = app.listen(8050, function() {
     var host = server.address().address

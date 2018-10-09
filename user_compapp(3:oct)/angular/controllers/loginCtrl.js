@@ -44,7 +44,7 @@ myapp.controller("loginCtrl", ["$scope", "$http", '$location', '$window', functi
 
     //     });
 
-
+    var postflag = 0;
 
     //posting data
     //submitData(firstName,lastName,email,address,city,password,status)"></td>
@@ -73,11 +73,12 @@ myapp.controller("loginCtrl", ["$scope", "$http", '$location', '$window', functi
         $http.post("/user", inputValue)
             .then(function(response) {
                     if (response) {
-                        editflag = 0;
+                        $scope.postflag = 1;
                         $scope.msg = "data posted ...."
                         $window.alert("user data inserted");
                         refresh();
                     }
+                    $scope.postflag = 1;
                 },
                 function(response) {
                     $scope.msg = "error occur";
@@ -134,29 +135,34 @@ myapp.controller("loginCtrl", ["$scope", "$http", '$location', '$window', functi
     $scope.update = function(firstName, lastName, email, address, city, password) {
         console.log("id in login to update=" + _id);
         //console.log("name in ctrl to update=" + $scope.firstName);
-        var inputValue = {
-            "firstName": firstName,
-            "lastName": lastName,
-            "email": email,
-            "userInfo": {
-                "address": address,
-                "city": city,
-            },
-            "password": password
-        };
-        console.log("data in put=" + inputValue.firstName);
-        $http.put("/user/" + _id, inputValue)
-            .then(function(response) {
-                    if (response) {
+        if (_id == null) {
+            $window.alert("user not exist to update");
 
-                        console.log("resp" + response);
-                        $scope.msg = "data posted ....";
-                        refresh();
-                    }
+        } else {
+            var inputValue = {
+                "firstName": firstName,
+                "lastName": lastName,
+                "email": email,
+                "userInfo": {
+                    "address": address,
+                    "city": city,
                 },
-                function(response) {
-                    $scope.msg = "error occur";
-                })
+                "password": password
+            };
+            console.log("data in put=" + inputValue.firstName);
+            $http.put("/user/" + _id, inputValue)
+                .then(function(response) {
+                        if (response) {
+
+                            console.log("resp" + response);
+                            $scope.msg = "data posted ....";
+                            refresh();
+                        }
+                    },
+                    function(response) {
+                        $scope.msg = "error occur";
+                    })
+        }
     }
 
     //deactivate
@@ -226,6 +232,7 @@ myapp.controller("loginCtrl", ["$scope", "$http", '$location', '$window', functi
     //                    })
     //       }
 
+    var login = 0;
     //login
     $scope.submit = function(email, password) {
         console.log("loginCTRL for login  called");
@@ -237,12 +244,16 @@ myapp.controller("loginCtrl", ["$scope", "$http", '$location', '$window', functi
             .then(function(response) {
                     console.log("resp in login ctrl after input " + response.data);
                     if (response) {
+                        $scope.login = 1;
                         var resp = response;
                         console.log("resp" + resp);
                         console.log(response.data[0]);
 
                         $location.path('/user');
-                    } else {
+                    }
+
+                    // $scope.login = 1;
+                    else {
                         $scope.alert("invalid credentials try again");
                         $location.path('#');
                     }
@@ -255,5 +266,20 @@ myapp.controller("loginCtrl", ["$scope", "$http", '$location', '$window', functi
     }
 
 
+    //logout
+    $scope.logout = function() {
+        console.log("user logout fun called  ");
+        $http({ method: "GET", url: "/logout" })
+            .then(function(response) {
+                    console.log("user logout ");
+                    console.log(response);
+                    $location.path('/');
+                },
+                function(response) {
+                    //$scope.userlist = response.userlist || 'Request failed';
+                    $scope.status = response.status;
+
+                });
+    }
 
 }])

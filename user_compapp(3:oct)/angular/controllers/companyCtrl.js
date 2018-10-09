@@ -17,23 +17,6 @@ myapp.controller("companyCtrl", ["$scope", "$http", '$window', function($scope, 
     }
     refresh();
 
-    // $http({ method: "GET", url: "/user" })
-    // .then(function(response) {
-    //         console.log("user data  ctrl found ");
-    //          console.log(response);
-
-
-    //           $scope.status=response.status;
-
-    //           $scope.userlist = response;
-    //         console.log($scope.userlist);
-    //     },
-    //     function(response) {
-    //         //$scope.userlist = response.userlist || 'Request failed';
-    //         //$scope.status = response.status;
-
-    //     });
-
 
     var putdata = 0;
 
@@ -123,32 +106,35 @@ myapp.controller("companyCtrl", ["$scope", "$http", '$window', function($scope, 
 
     //update
     $scope.update = function(companyName, RegistartionNo) {
-        console.log("id in cmp to update=" + _id);
-        console.log("checkedit=" + checkedit);
-        //console.log("name in ctrl to update=" + $scope.firstName);
-        var inputValue = {
-            "companyName": companyName,
-            "companyInfo": {
-                "RegistartionNo": RegistartionNo
-            }
-        };
-        //console.log("data in put=" + inputValue.firstName);
-        $http.put("/company/" + _id, inputValue)
-            .then(function(response) {
-                    if (response) {
-                        console.log("resp" + response);
-                        $scope.companyName = "";
-                        $scope.msg = "data posted ...."
-                        refresh();
+            console.log("id in cmp to update=" + _id);
+            // console.log("checkedit=" + checkedit);
+            if (_id == null) {
+                $window.alert("company data not exist ti update");
+            } else {
+                //console.log("name in ctrl to update=" + $scope.firstName);
+                var inputValue = {
+                    "companyName": companyName,
+                    "companyInfo": {
+                        "RegistartionNo": RegistartionNo
                     }
-                },
-                function(response) {
-                    $scope.msg = "error occur";
-                })
-    }
-
-    //deactivate
-    //update
+                };
+                //console.log("data in put=" + inputValue.firstName);
+                $http.put("/company/" + _id, inputValue)
+                    .then(function(response) {
+                            if (response) {
+                                console.log("resp" + response);
+                                $scope.companyName = "";
+                                $scope.msg = "data posted ...."
+                                refresh();
+                            }
+                        },
+                        function(response) {
+                            $scope.msg = "error occur";
+                        })
+            }
+        }
+        //deactivate
+        //update
     $scope.status = null;
     $scope.deactivate = function(id, status) {
         console.log("id in login to deactivate=" + id);
@@ -191,38 +177,22 @@ myapp.controller("companyCtrl", ["$scope", "$http", '$window', function($scope, 
                     })
         }
 
-
-        // $http.put("/company1/" + id)
-        //     .then(function(response) {
-        //             if (response) {
-        //                 // console.log("resp" + response);
-        //                 $scope.msg = "data posted ...."
-        //                 refresh();
-        //                 $window.alert("company deactivated....");
-        //             }
-        //         },
-        //         function(response) {
-        //             $scope.msg = "error occur";
-        //         })
     }
 
-    // //activate
-    // //update
-    // $scope.activate = function(id) {
-    //     console.log("id in login to activate=" + id);
-    //     //console.log("name in ctrl to update=" + $scope.firstName);
-    //     $http.put("/companys/" + id)
+
+    // //logout
+    // $scope.logout = function() {
+    //     console.log("cmp logout fun called  ");
+    //     $http({ method: "GET", url: "/logout" })
     //         .then(function(response) {
-    //                 if (response) {
-    //                     // console.log("resp" + response);
-    //                     $scope.msg = "data posted ...."
-    //                     refresh();
-    //                     $window.alert("company activated....");
-    //                 }
+    //                 console.log("cmp logout ");
+    //                 console.log(response);
+    //                 $location.path('/');
     //             },
     //             function(response) {
-    //                 $scope.msg = "error occur";
-    //             })
-    // }
+    //                 //$scope.userlist = response.userlist || 'Request failed';
+    //                 $scope.status = response.status;
 
+    //             });
+    // }
 }])
