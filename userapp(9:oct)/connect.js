@@ -86,6 +86,7 @@ app.use('/user', function(err, req, res, next) {
 
 //get 
 app.get("/user", function(req, res) {
+
         console.log("res in get of connect.js" + res.length);
         console.log("inside connect.js user app")
         if (req.session.email != null) {
@@ -95,9 +96,10 @@ app.get("/user", function(req, res) {
                     res.send(docs);
                 }
             });
-        } else {
-            res.send("nouser");
         }
+        // else {
+        //     res.send("nouser");
+        // }
     })
     // app.get("/user", function(req, res) {
     //     console.log("res in get of connect.js" + res.length);
@@ -120,7 +122,7 @@ app.post("/user", function(req, res) {
     var user = req.body;
     console.log("user=" + user);
     console.log("user email =" + user.email);
-    if (!req.session.docs) {
+    if (req.session.email == null) {
         return res.status(404).send();
     } else {
         users.findOne({ email: user.email }, function(err, existinguser) {
@@ -161,14 +163,15 @@ app.delete('/user/:id', function(req, res) {
     let id = req.params.id;
     async.series([
         function(callback) {
-
-            users.find({ $or: [{ "_id": id }, { "email": id }] }, function(err, docs) {
-                if (docs.length !== 0) {
-                    callback();
-                } else {
-                    callback('user does not exist');
-                }
-            })
+            if (req.session.email != null) {
+                users.find({ $or: [{ "_id": id }, { "email": id }] }, function(err, docs) {
+                    if (docs.length !== 0) {
+                        callback();
+                    } else {
+                        callback('user does not exist');
+                    }
+                })
+            }
         },
         function(callback) {
             users.remove({ $or: [{ "_id": id }, { "email": id }] }, function(err) {
@@ -212,15 +215,17 @@ app.put('/user/:id', function(req, res) {
 
     async.series([
             function(callback) {
-                users.find({ 'email': req.body.email },
-                    function(err, docs) {
-                        console.log(docs);
-                        if (docs.length > 0) {
-                            callback()
-                        } else {
-                            callback('Data not found to Update');
-                        }
-                    })
+                if (req.session.email != null) {
+                    users.find({ 'email': req.body.email },
+                        function(err, docs) {
+                            console.log(docs);
+                            if (docs.length > 0) {
+                                callback()
+                            } else {
+                                callback('Data not found to Update');
+                            }
+                        })
+                }
             },
             function(callback) {
                 users.update({ 'email': req.body.email }, { '$set': { firstName: req.body.firstName, lastName: req.body.lastName, password: req.body.password, "userInfo.city": req.body.userInfo.city, "userInfo.address": req.body.userInfo.address } },
@@ -441,7 +446,7 @@ app.put("/company1/:_id", function(req, res) {
     })
 })
 
-var server = app.listen(8052, function() {
+var server = app.listen(8054, function() {
     var host = server.address().address
     var port = server.address().port
     console.log("Example app listening at http://%s:%s", host, port)
