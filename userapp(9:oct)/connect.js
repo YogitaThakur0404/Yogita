@@ -50,6 +50,7 @@ app.post("/", function(req, res) {
                 req.session.docs = docs;
                 console.log(" post session=" + req.session.docs);
                 res.redirect('#!user');
+                //res.send(data);
             } else {
                 var data = { "msg": "invalid credentials" };
                 req.session.docs = docs;
@@ -58,6 +59,7 @@ app.post("/", function(req, res) {
                 // res.send("/");
                 res.status("400");
                 res.redirect('/');
+                // res.send(data);
             }
         });
     }
@@ -446,7 +448,7 @@ app.put("/company1/:_id", function(req, res) {
     })
 })
 
-var server = app.listen(8054, function() {
+var server = app.listen(8044, function() {
     var host = server.address().address
     var port = server.address().port
     console.log("Example app listening at http://%s:%s", host, port)

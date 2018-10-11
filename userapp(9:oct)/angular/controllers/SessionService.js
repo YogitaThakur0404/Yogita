@@ -1,63 +1,153 @@
 //service
-myapp.factory('SessionService', ["$cookies", "$http", function($http, $cookies) {
+myapp.factory('SessionService', ["$cookies", "$http", '$location', function($http, $cookies, $location) {
     var SessionService = {};
-
-
-    SessionService.login = function(email, password) {
-        console.log(email);
-        var data = {
-            email: email,
-            password: password
-        }
+    SessionService.login = function() {
         console.log("inside sessionservice")
-        return $http.post("/", data).then(function(response) {
-                $cookies.put(response);
-            }
-
-        )
-
-        /*
-        ($http.post("/", email, password)
-                .then(function(response) {
-
-                })*/
-
-        // $http({
-        //        url: baseUrl + 'auth',
-        //     method: "POST",
-        //     data: {
-        //         email: data.email,
-        //         password: data.password
-        //     }
-        // }).success(function(response) {
-        //     //$cookies.put('auth', response);
-        //     $cookies.put(response);
-
-        // }).error(function(data, status) {
-        //     alert(data);
-
-        // })
-        // console.log("url=" + url);
     };
-    SessionService.getAuthStatus = function() {
-        var status = true;
+
+    // SessionService.getAuthStatus = function() {
+    //     var status = $cookies.get('cks');
+    //     if (status) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
+    // SessionService.dologout = function() {
+    //     $cookies.remove('cks');
+    // }
+
+    return SessionService;
+
+}])
+
+/*
+
+
+// /*
+
+
+
+app.factory('userModel', ['$cookies', function($cookies) {
+    var userModel = {};
+    userModel.stack = function() {
+        console.log("hello world");
+    }
+
+    userModel.getAuthStatus = function() {
+        var status = $cookies.get('abc');
         if (status) {
             return true;
         } else {
             return false;
         }
     }
+    userModel.dologout = function() {
+        $cookies.remove('abc');
+    }
+
+    return userModel;
+}]);
+
+// //service
+// myapp.factory('SessionService', ["$cookies", "$http", '$location', function($http, $cookies, $location) {
+//     var SessionService = {};
+//     SessionService.login = function(data) {
+//         // console.log(email);
+//         console.log("inside sessionservice")
+//             /*
+//             app.factory('userModel', ['$cookies', function($cookies) {
+//                 var userModel = {};
+//                 userModel.stack = function() {
+//                     console.log("hello world");
+//                 }
+
+//                 userModel.getAuthStatus = function() {
+//                     var status = $cookies.get('abc');
+//                     if (status) {
+//                         return true;
+//                     } else {
+//                         return false;
+//                     }
+//                 }
+//                 userModel.dologout = function() {
+//                     $cookies.remove('abc');
+//                 }
+
+//                 return userModel;
+//             }]);
+
+//             */
 
 
-    return SessionService;
-    // var userIsAuthenticated = false;
+//         // $http.post("/", data).then(function(response) {
+//         //         //  $http.post("/", data).then(function(response) {
+//         //         console.log("data in fact" + response);
+//         //         if (response.data != null) {
+//         //             $cookies.put('/', response);
+//         //         } else {
+//         //             $location.path('/');
+//         //         }
+//         //     }
 
-    // this.setUserAuthenticated = function(value) {
-    //     userIsAuthenticated = value;
-    // };
+//         // )
 
-    // this.getUserAuthenticated = function() {
-    //     return userIsAuthenticated;
-    // };
+//         /*
+//          return $http.post('/login', loginData).then(function(response) {
+//                     console.log(response);
+//                     if (response.data == 'user') {
+//                         $cookies.put('auth', response);
+//                         $location.path(response.data);
+//                     } else {
+//                         alert("email and password not match")
+//                         $location.path('/');
+//                     }
+//                 });
+//                 */
 
-}])
+//             };
+//             SessionService.getAuthStatus = function() {
+//                 var status = $cookies.get('cks');
+//                 if (status) {
+//                     return true;
+//                 } else {
+//                     return false;
+//                 }
+//             }
+//             SessionService.dologout = function() {
+//                 $cookies.remove('cks');
+//             }
+
+//             return SessionService;
+
+//         }])
+
+//         /*
+//         app.factory('myFactory', ['$http', '$cookies', '$location', function($http, $cookies, $location) {
+//             var userModel = {};
+//             userModel.doLogin = function(loginData) {
+//                 console.log(loginData);
+//                 return $http.post('/login', loginData).then(function(response) {
+//                     console.log(response);
+//                     if (response.data == 'user') {
+//                         $cookies.put('auth', response);
+//                         $location.path(response.data);
+//                     } else {
+//                         alert("email and password not match")
+//                         $location.path('/');
+//                     }
+//                 });
+//             };
+
+//             userModel.getAuthStatus = function() {
+//                 var status = $cookies.get('auth');
+//                 if (status) {
+//                     return true;
+//                 } else {
+//                     return false;
+//                 }
+//             }
+//             return userModel;
+//         }]);
+//         */
+// */

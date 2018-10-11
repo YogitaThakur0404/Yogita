@@ -5,10 +5,10 @@ myapp.controller("companyCtrl", ["$scope", "$http", '$location', '$window', func
             .then(function(response) {
                     console.log("cmp  ctrl found in cmpctrl.js ");
                     console.log(response.data);
-                    if (response.data == 'nouser') {
-                        $location.path("/");
-                        $window.alert("You need to Login first..")
-                    }
+                    // if (response.data == 'nouser') {
+                    //     $location.path("/");
+                    //     $window.alert("You need to Login first..")
+                    // }
                     $scope.cmplist = response.data;
                     console.log($scope.cmplist);
                 },
@@ -178,6 +178,45 @@ myapp.controller("companyCtrl", ["$scope", "$http", '$location', '$window', func
                     })
         }
 
+    }
+    var login = 0;
+    //login
+    $scope.submit = function(email, password) {
+        console.log("loginCTRL for login  called");
+        $scope.email = email;
+        $scope.password = password;
+        console.log($scope.email);
+        console.log($scope.password);
+
+        // var data = {
+        //     email: $scope.email,
+        //     password: $scope.password
+        // }
+        //  SessionService.login($scope.email, $scope.password);
+
+        $http.post("/", $scope.email, $scope.password)
+            .then(function(response) {
+                    console.log("resp in login ctrl after input " + response.data);
+                    if (response) {
+                        $scope.login = 1;
+                        var resp = response;
+                        console.log("resp" + resp);
+                        console.log(response.data[0]);
+
+                        $location.path('/user');
+                    }
+
+                    // $scope.login = 1;
+                    else {
+                        $scope.alert("invalid credentials try again");
+                        $location.path('#');
+                    }
+                },
+                function(response) {
+
+                    $scope.msg = "error occur";
+                })
+            // }
     }
 
 

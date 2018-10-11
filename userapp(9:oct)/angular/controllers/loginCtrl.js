@@ -1,9 +1,61 @@
-myapp.controller("loginCtrl", ["$scope", "$http", '$location', '$window', 'SessionService', function($scope, $http, $location, $window, SessionService) {
+myapp.controller("loginCtrl", ["$scope", "$http", '$location', '$window', 'SessionService', '$cookies', function($scope, $http, $location, $window, $cookies, SessionService) {
+
+
+
+
+    $scope.submit = function(email, password) {
+        console.log("inside submit login ctrl");
+        // $scope.email = email;
+        //  $scope.password = password;
+        console.log($scope.email);
+        console.log($scope.password);
+
+        // SessionService.login();
+
+        $http.post("/", $scope.email, $scope.password)
+            .then(function(response) {
+                    console.log("resp in login input ctrl after input " + response.data);
+                    if (response) {
+
+                        console.log(response.data);
+                        if (response.data != null) {
+                            $cookies.put('cks', response);
+                            $location.path('/user');
+                        }
+                    }
+
+                    // $scope.login = 1;
+                    else {
+                        $scope.alert("invalid credentials try again");
+                        $location.path('/');
+                    }
+                },
+                function(response) {
+
+                    $scope.msg = "error occur";
+                })
+
+
+    }
+
+
     var _id;
     var refresh = function() {
         $http({ method: "GET", url: "/user" })
             .then(function(response) {
                     console.log("user login  ctrl found ");
+
+                    //   SessionService.login(email, password);
+                    // $scope.submit = function(email, password) {
+                    //     console.log("loginCTRL for login  called");
+                    //     $scope.email = email;
+                    //     $scope.password = password;
+                    //     console.log($scope.email);
+                    //     console.log($scope.password);
+
+                    //     SessionService.login(email, password);
+                    // }
+
                     //console.log("data in login get " + response.data.length);
                     console.log("data in login get " + response.data);
                     // if (response.data == 'nouser') {
@@ -200,35 +252,35 @@ myapp.controller("loginCtrl", ["$scope", "$http", '$location', '$window', 'Sessi
         console.log($scope.email);
         console.log($scope.password);
 
-        var data = {
-            email: $scope.email,
-            password: $scope.password
-        }
-        SessionService.login($scope.email, $scope.password);
+        // var data = {
+        //     email: $scope.email,
+        //     password: $scope.password
+        // }
+        //  SessionService.login($scope.email, $scope.password);
 
-        // $http.post("/", $scope.email, $scope.password)
-        //     .then(function(response) {
-        //             console.log("resp in login ctrl after input " + response.data);
-        //             if (response) {
-        //                 $scope.login = 1;
-        //                 var resp = response;
-        //                 console.log("resp" + resp);
-        //                 console.log(response.data[0]);
+        $http({ method: "POST", url: "/", data: { email: email, password: password } })
+            .then(function(response) {
+                    console.log("resp in login ctrl after input " + response.data);
+                    if (response) {
+                        $scope.login = 1;
+                        var resp = response;
+                        console.log("resp" + resp);
+                        console.log(response.data[0]);
 
-        //                 $location.path('/user');
-        //             }
+                        $location.path('/user');
+                    }
 
-        //             // $scope.login = 1;
-        //             else {
-        //                 $scope.alert("invalid credentials try again");
-        //                 $location.path('#');
-        //             }
-        //         },
-        //         function(response) {
+                    // $scope.login = 1;
+                    else {
+                        $scope.alert("invalid credentials try again");
+                        $location.path('#');
+                    }
+                },
+                function(response) {
 
-        //             $scope.msg = "error occur";
-        //         })
-        //}
+                    $scope.msg = "error occur";
+                })
+            // }
     }
 
 
