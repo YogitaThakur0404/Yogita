@@ -1,16 +1,18 @@
-myapp.controller("companyCtrl", ["$scope", "$http", '$location', '$window', function($scope, $http, $location, $window) {
+myapp.controller("companyCtrl", ["$scope", "$http", '$location', '$window', 'SessionService', function($scope, $http, $location, $window, SessionService) {
     var _id;
     var refresh = function() {
         $http({ method: "GET", url: "/company" })
             .then(function(response) {
                     console.log("cmp  ctrl found in cmpctrl.js ");
                     console.log(response.data);
+                    // if (response.data == 'data') {
+                    $scope.cmplist = response.data;
+                    console.log($scope.cmplist);
+                    //  }
                     // if (response.data == 'nouser') {
                     //     $location.path("/");
                     //     $window.alert("You need to Login first..")
                     // }
-                    $scope.cmplist = response.data;
-                    console.log($scope.cmplist);
                 },
                 function(response) {
                     $scope.status = response.status;

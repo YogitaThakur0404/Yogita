@@ -1,21 +1,17 @@
 <html ng-app="myapp">
 
 <head>
+    <!-- <base href="/"> -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
     <script src="module.js"></script>
 </head>
 
-<body ng-controller="loginCtrl">
-
+<body ng-controller="inputCtrl">
     <div class="container">
-
         <div class="main-div">
             <center>
                 <div class="panel">
@@ -46,20 +42,10 @@
             </div>
             <br>
             <div class="control-label col-sm-6">
-                <input type="submit" ng-disabled="!myForm.$valid" class="btn btn-primary" value="submit" onclick="submit(email,password)"></div>
-
-            <!-- <pre>myForm.myName.$error = {{ myForm.myName.$error | json }}</pre> -->
-
-            <!-- <div ng-messages="myForm.myName.$error" style="color:maroon" role="alert">
-                <div ng-messa="required">You did not enter a field</div>
-                <div ng-message="minlength">Your field is too short</div>
-                <div ng-message="maxlength">Your field is too long</div>
-                <div ng-message-default>This field has an input error</div>
-            </div> -->
+                <input type="submit" ng-disabled="!myForm.$valid" class="btn btn-primary" value="submit" ng-click="submit(email,password)"></div>
         </form>
     </div>
-    <script src="controllers/loginCtrl.js"></script>
-
+    <script src="controllers/inputCtrl.js"></script>
 </body>
 
 </html>

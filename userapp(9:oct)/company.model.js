@@ -10,16 +10,3 @@ var Schema = new mongoose.Schema({ //created schema
 
 
 module.exports = mongoose.model("companys", Schema);
-
-/* companyName , companyInfo , status
-db.companys.insert(
-{
-  
-    "companyName" : "Dell",
-    "companyInfo" : {
-        "RegistartionNo" : 75234
-    },
-    "status" : "activated"
-}
-)
- */

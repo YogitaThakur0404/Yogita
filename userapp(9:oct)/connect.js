@@ -1,11 +1,7 @@
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-
-
 var app = express();
-//var router = express.Router();
-
 var fs = require("fs");
 app.use(express.json());
 var bodyParser = require('body-parser');
@@ -18,7 +14,6 @@ app.use(express.static('public'));
 app.use(cookieParser());
 app.use(session({ secret: "Your secret key", cookie: { maxAge: 3600000 }, saveUninitialized: true, resave: true }));
 
-
 var async = require('async');
 
 var users = require("./user.model")
@@ -26,16 +21,12 @@ var companys = require("./company.model")
 var mongoose = require("mongoose");
 
 mongoose.connect("mongodb://localhost/userdb1"); //company database
-//mongoose.connect("mongodb://localhost/companydb");
-
 
 app.use(express.static(__dirname + "/angular"));
-//app.use("/all", router);
-
-app.post("/", function(req, res) {
+//login
+app.post("/login", function(req, res) {
     req.session.email = req.body.email;
     console.log("req.sess.email=" + req.session.email);
-
     console.log("inside login connect.js user app")
     console.log("email=" + req.body.email);
     console.log("pwd=" + req.body.password);
@@ -48,30 +39,19 @@ app.post("/", function(req, res) {
             console.log("leng=" + docs.length);
             if (docs.length > 0) {
                 req.session.docs = docs;
-                console.log(" post session=" + req.session.docs);
-                res.redirect('#!user');
-                //res.send(data);
+                console.log("post session=" + req.session.docs);
+                //   res.redirect('/#!user');
+                res.send("data");
+
             } else {
-                var data = { "msg": "invalid credentials" };
                 req.session.docs = docs;
-                console.log(" post fail session=" + req.session.docs);
-                console.log("invalid cond login=" + docs.length);
-                // res.send("/");
-                res.status("400");
                 res.redirect('/');
-                // res.send(data);
+
             }
         });
     }
 })
 
-// const authmiddleware = (req, res, next) => {
-//     if (req.session && req.session.email) {
-//         next();
-//     } else {
-//         res.status(403).send({ error: "log in first" });
-//     }
-// }
 
 //logout
 app.get('/logout', function(req, res) {
@@ -81,45 +61,22 @@ app.get('/logout', function(req, res) {
     res.redirect('/');
 });
 
-app.use('/user', function(err, req, res, next) {
-    console.log(err);
-    res.redirect('/');
-});
 
 //get 
 app.get("/user", function(req, res) {
+    console.log("res in get of connect.js" + res.length);
+    console.log("inside connect.js user app")
+    if (req.session.email != null) {
+        users.find({}, function(err, docs) {
+            console.log(docs);
+            if (docs.length > 0) {
+                res.send(docs);
+            }
+        });
+    }
+})
 
-        console.log("res in get of connect.js" + res.length);
-        console.log("inside connect.js user app")
-        if (req.session.email != null) {
-            users.find({}, function(err, docs) {
-                console.log(docs);
-                if (docs.length > 0) {
-                    res.send(docs);
-                }
-            });
-        }
-        // else {
-        //     res.send("nouser");
-        // }
-    })
-    // app.get("/user", function(req, res) {
-    //     console.log("res in get of connect.js" + res.length);
-    //     console.log("inside connect.js user app")
-    //     if (req.session.email != null) {
-    //         users.find({}, function(err, docs) {
-    //             console.log(docs);
-    //             if (docs.length > 0) {
-    //                 res.send(docs);
-    //             } else {
-    //                 res.send("nouser");
-    //             }
-    //         });
-    //     } else {
-    //         res.send("nosession");
-    //     }
-    // })
-    //post
+//post
 app.post("/user", function(req, res) {
     var user = req.body;
     console.log("user=" + user);
@@ -130,7 +87,6 @@ app.post("/user", function(req, res) {
         users.findOne({ email: user.email }, function(err, existinguser) {
             if (existinguser == null) {
                 console.log("email=" + req.body.email);
-
                 var email = function ValidateEmail(mail) {
                     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(req.body.email)) {
                         var user1 = new users({ firstName: req.body.firstName, lastName: req.body.lastName, password: req.body.password, email: req.body.email, "userInfo.city": req.body.userInfo.city, "userInfo.address": req.body.userInfo.address, "status": "activated" });
@@ -157,7 +113,6 @@ app.post("/user", function(req, res) {
     }
 
 })
-
 
 //delete
 app.delete('/user/:id', function(req, res) {
@@ -195,8 +150,6 @@ app.delete('/user/:id', function(req, res) {
     })
 })
 
-
-
 app.get("/user/:id", function(req, res) {
     var id = req.params.id;
     console.log("inside connect.js user app for edit" + id)
@@ -214,7 +167,6 @@ app.put('/user/:id', function(req, res) {
     var user = req.body;
     console.log("user=" + user)
     console.log("id in connect for update=" + id);
-
     async.series([
             function(callback) {
                 if (req.session.email != null) {
@@ -284,23 +236,22 @@ app.put("/user1/:_id", function(req, res) {
         })
 
     })
-    ///// company
-
-//get
+    ///// company////
+    //get
 app.get("/company", function(req, res) {
-
-    console.log("inside connect.js company app")
-    if (req.session.email != null) {
-        companys.find({}, function(err, docs) {
-            console.log("company=" + docs);
-            res.send(docs);
-        });
-    } else {
-        res.send("nouser");
-    }
-})
-
-//post
+        console.log("inside connect.js company app")
+        if (req.session.email != null) {
+            companys.find({}, function(err, docs) {
+                console.log("company=" + docs);
+                res.send(docs);
+            });
+        }
+        //   res.redirect("/");
+        // else {
+        //     res.send("nouser");
+        // }
+    })
+    //post
 app.post("/company", function(req, res) {
     var company1 = req.body;
     console.log("company1=" + company1);
@@ -334,7 +285,6 @@ app.delete('/company/:id', function(req, res) {
     let id = req.params.id;
     async.series([
         function(callback) {
-
             companys.find({ "_id": id }, function(err, docs) {
                 if (docs.length !== 0) {
                     callback();
@@ -353,7 +303,6 @@ app.delete('/company/:id', function(req, res) {
                 }
             })
         }
-
     ], function(error, data) {
         if (error) {
             res.send(error);

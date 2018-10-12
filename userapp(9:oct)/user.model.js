@@ -13,18 +13,3 @@ var Schema = new mongoose.Schema({ //created schema
 
 }, { versionKey: false });
 module.exports = mongoose.model("users", Schema);
-/*
-firstName , lastName, email ,userInfo -address and all , status 
-*/
-
-/*
-db.users.insert({"firstName":"hemant",
-"lastName":"Thakur",
-"email":"hemant@gmail.com",
-"userInfo":{
-    "address":"n4",
-    "city":"aurangabad"
-},
-"password":"123456789",
-"status":"activated"});
-*/
