@@ -1,0 +1,69 @@
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="main-div">
+            <center>
+                <div class="panel">
+                    <h2>Register</h2>
+
+            </center>
+            </div>
+        </div>
+
+        <form action="/register" method="post" role="form" class="form-horizontal" name="form1" novalidate>
+            <div>
+
+
+                <div class="form-group" ng-class="{'has-error': form1.userName.$error}"><label class="control-label col-sm-6"> username:</label>
+                    <div class="col-sm-2"> <input class="form-control" placeholder="username" name="username" ng-minlength="3" ng-maxlength="25" ng-model="firstName" type="text" autofocus="" ng-pattern="/^[a-zA-Z]+$/" required />
+                        <p>please enter char[a-z/A-Z] only and leng >3 and
+                            <25</p>
+                                <!-- <p ng-show="form1.username.$error.required && (form1.username.$dirty || submitted)" class="label label-danger">Your userName is required(eg:abcd).</p>
+                        <p ng-show="form1.username.$error.minlength" class="label label-danger">It is too short min length is 3.</p>
+                        <p ng-show="form1.username.$error.maxlength" class="label label-danger">It is too long max length is 25.</p>
+                        <p ng-show="form1.username.$error.pattern" class="label label-danger">please enter char[a-z/A-Z] only.</span> -->
+                    </div>
+                </div>
+
+
+
+
+                <!-- <label>Username:</label>
+                <input type="text" name="username" />
+                <br/> -->
+            </div>
+            <div>
+
+                <div class="form-group" ng-class="{'has-error': form1.password.$error.required}"><label class="control-label col-sm-6">password:</label>
+                    <div class="col-sm-2"> <input class="form-control" placeholder="Password" ng-minlength="8" ng-model="password" ng-maxlength="12" name="password" type="password" value="" autocomplete="off" required>
+                        <p>leng>8 and
+                            <12</p>
+                                <!-- <span ng-show="form1.password.$error.required&& (form1.password.$dirty || submitted)" class="help-block">Your password is required.</span>
+                        <span ng-show="form1.password.$error.minlength" class="label label-danger">It is too short min length is 8.</span>
+                        <span ng-show="form1.password.$error.maxlength" class="label label-danger">It is too large max length is 12.</span> -->
+                    </div>
+
+
+
+                    <!-- <label>Password:</label>
+                <input type="password" name="password" /> -->
+                </div>
+                <div class="control-label col-sm-6">
+                    <input type="submit" value="Submit" ng-disabled="!form1.$valid" class="btn btn-primary" />
+                </div>
+
+        </form>
+
+</body>
+
+</html>
