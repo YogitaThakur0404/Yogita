@@ -1,0 +1,65 @@
+<html ng-app="myapp">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+    <script src="module.js"></script>
+</head>
+
+<body ng-controller="loginCtrl">
+
+    <div class="container">
+
+        <div class="main-div">
+            <center>
+                <div class="panel">
+                    <h2>Login</h2>
+                    <p>Please enter your email and password</p>
+            </center>
+            </div>
+        </div>
+        <form name="myForm" method="POST" class="form-horizontal" novalidate>
+            <div class="form-group">
+                <label class="control-label col-sm-6">  Email_Id:</label><br>
+                <div class="col-sm-2">
+                    <input class="form-control" placeholder="E-Mail" id="email" name="email" ng-model="email" type="email" value="" ng-class="{'has-error': registerForm.email.$error.pattern}" ng-pattern="/^\w+([\.-]?\w+)*@[a-zA-Z](?:[a-zA-Z]{0,10}[a-zA-Z])*(\.\w{2,3})+$/"
+                        required /></div>
+                <!-- <input type="email" name="email" ng-model="email" ng-required="true"><br> -->
+                <span ng-show="myForm.email.$dirty && myForm.email.$error.required" class="label label-danger">Email is required.</span>
+                <span ng-show="myForm.email.$dirty && myForm.email.$error.email" class="label label-danger">Invalid Email address.</span>
+                <p ng-show="myForm.email.$error.pattern" class="label label-danger">please enter valid email only eg:abc@gmail.com.</span>
+
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-6"> password: </label><br>
+                <div class="col-sm-2"><input placeholder="Password" class="form-control" ng-minlength="8" ng-model="password" ng-maxlength="12" name="password" type="password" value="" autocomplete="off">
+                </div>
+                <!-- <input type="password" name="password" ng-model="password" ng-required="true"><br> -->
+                <span ng-show="myForm.password.$dirty && myForm.password.$error.required" class="label label-danger">password is required.</span>
+                <span ng-show="myForm.password.$dirty && myForm.password.$error.email" class="label label-danger">Invalid password:length must be 8 to 12.</span>
+            </div>
+            <br>
+            <div class="control-label col-sm-6">
+                <input type="submit" ng-disabled="!myForm.$valid" class="btn btn-primary" value="submit" onclick="submit(email,password)"></div>
+
+            <!-- <pre>myForm.myName.$error = {{ myForm.myName.$error | json }}</pre> -->
+
+            <!-- <div ng-messages="myForm.myName.$error" style="color:maroon" role="alert">
+                <div ng-messa="required">You did not enter a field</div>
+                <div ng-message="minlength">Your field is too short</div>
+                <div ng-message="maxlength">Your field is too long</div>
+                <div ng-message-default>This field has an input error</div>
+            </div> -->
+        </form>
+    </div>
+    <script src="controllers/loginCtrl.js"></script>
+
+</body>
+
+</html>
