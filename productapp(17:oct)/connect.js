@@ -41,109 +41,133 @@ app.get("/product", function(req, res) {
                     };
                 })
             };
-
             res.status(200).json(response);
-
         })
         .catch(err => {
             console.log(err);
             res.status(500).json({
                 error: err
             });
-
         })
+
 })
 
 //get by brand
 app.get("/product/:brand", function(req, res) {
     var brand = req.params.brand;
-
-    products.aggregate(
-        [{ $match: { brand: brand } },
-            { $project: { productName: { $toUpper: "$productName" }, _id: 0, state: 1 } },
-
-            { $sort: { productName: 1 } }
-        ],
-        function(error, data) {
-            console.log("data=" + data);
-            if (data.length > 0) {
-                res.send(data);
-            } else if (data == undefined) {
-                res.send("please insert valid input");
-
-            } else {
-                res.send("no product found");
-            }
-
-        })
-
+    async.series([
+        function(callback) {
+            products.aggregate(
+                [{ $match: { brand: brand } },
+                    { $project: { productName: { $toUpper: "$productName" }, _id: 0, state: 1 } },
+                    { $sort: { productName: 1 } }
+                ],
+                function(error, data) {
+                    console.log("data=" + data.length);
+                    if (data.length > 0) {
+                        callback(null, data);
+                    } else if (data.length <= 0) {
+                        callback("no such brand available ");
+                    }
+                })
+        },
+    ], function(error, data) {
+        if (error) {
+            res.send(error);
+        } else {
+            res.send(data);
+        }
+    });
 })
 
 //by rating
 app.get("/product1/:rating", function(req, res) {
     var rating = req.params.rating;
-    products.find({ rating: rating }, function(error, data) {
-        if (data.length > 0) {
-            res.send(data);
-        } else if (data == undefined) {
-            res.send("please insert valid input");
+    async.series([
+        function(callback) {
+            products.find({ rating: rating }, function(error, data) {
+                if (data.length > 0) {
+                    callback(null, data);
+                } else if (error) {
+                    callback("please insert valid input");
 
+                } else {
+                    callback("no product found");
+                }
+            })
+        },
+    ], function(error, data) {
+        if (error) {
+            res.send(error);
         } else {
-            res.send("no product found");
+            res.send(data);
         }
-    })
+    });
 })
 
 app.post("/product", function(req, res) {
         var prod = req.body;
         console.log("prod" + prod);
-
-        products.find({ productId: req.body.productId }, function(error, data) {
-            if (data.length > 0) {
-                res.send("productId already exist ....try another value");
-            } else if (data.length == 0) {
-                products.create(req.body, function(err, data) {
-                    if (!data) {
-                        console.log("error in posting data");
-                        res.send("data not added");
-                    } else if (err) {
-                        res.send(err);
+        async.series([
+            function(callback) {
+                products.find({ productId: req.body.productId }, function(error, data) {
+                    if (data.length > 0) {
+                        res.send("productId already exist ....try another value");
+                    } else if (data.length == 0) {
+                        products.create(req.body, function(err, data) {
+                            if (!data) {
+                                console.log("error in posting data");
+                                callback("data not added");
+                            } else {
+                                callback(null, data);
+                            }
+                        })
                     } else {
-                        res.json(data);
+                        res.send("please enter valid data");
                     }
                 })
+            },
+        ], function(error, data) {
+            if (error) {
+                res.send(error);
             } else {
-                res.send("please enter valid data");
+                res.send(data);
             }
-        })
+        });
     })
     //put
 
 app.put("/product/:productId", function(req, res) {
-        // var prod = req.body;
         console.log("prodid" + req.params.productId);
-
-        products.find({ productId: req.params.productId }, function(error, data) {
-            console.log("data=" + data);
-            if (data.length > 0) {
-                // res.send("productId already exist ....try another value");
-                products.updateOne({ productId: req.params.productId }, { $set: { qty: req.body.qty } }, function(err, data) {
-                    if (!data) {
-                        console.log("error in posting data");
-                        res.send("data not added");
+        async.series([
+            function(callback) {
+                products.find({ productId: req.params.productId }, function(error, data) {
+                    console.log("data=" + data);
+                    if (data.length > 0) {
+                        products.updateOne({ productId: req.params.productId }, { $set: { qty: req.body.qty } }, function(err, data) {
+                            if (!data) {
+                                console.log("error in posting data");
+                                callback("data not added");
+                            } else {
+                                callback(null, data);
+                            }
+                        })
                     } else {
-                        res.json(data);
+                        callback("please enter valid data");
                     }
                 })
+            },
+        ], function(error, data) {
+            if (error) {
+                res.send(error);
             } else {
-                res.send("please enter valid data");
+                res.send(data);
             }
-        })
+        });
     })
     //with map and reduce 
 app.get("/product123/allbrand", function(req, res) {
     console.log("all brand");
-
     var o = {};
     o.map = function() {
         console.log("in mapper");
@@ -151,7 +175,6 @@ app.get("/product123/allbrand", function(req, res) {
         for (i in brands) {
             emit(brands[i], 1);
         }
-
     };
     o.reduce = function(key, values) {
         var count = 0;
@@ -160,8 +183,6 @@ app.get("/product123/allbrand", function(req, res) {
         }
         return count;
     };
-
-
     products.mapReduce(o, function(err, data, stats) {
         // console.log('map reduce took %d ms', stats.processtime)
         if (err) res.send(err);
@@ -171,29 +192,49 @@ app.get("/product123/allbrand", function(req, res) {
 
 //get by using cursor
 app.get("/product11", function(req, res) {
-    const cursor = products.find({ "qty": { $gt: 200 } }).cursor();
-    //Print the first document.
-    cursor.eachAsync(doc => {
-        console.log("data=" + doc);
-        res.send(doc)
+        const cursor = products.find({ "qty": { $gt: 2000 } }).cursor();
+        //Print the first document.
+        cursor.eachAsync(data => { //return only one record 
+            console.log("data=" + data)
+            if (data.length > 0) {
+                console.log("data=" + data);
+                res.send(data)
+            } else {
+                res.send("no data found")
+            }
+        })
     })
-})
-
-//different operators
+    //different operators
 app.get("/productmatch/:productName", function(req, res) {
     var name = req.params.productName;
     console.log("name=" + name);
-    //$text:
-    // products.find({ $text: { $search: name } }, function(error, data) {
-    //     console.log(data);
-    //     res.send(data);
-    // })
+    async.series([
+        function(callback) {
+            //$text:
+            // products.find({ $text: { $search: name } }, function(error, data) {
+            //     console.log(data);
+            //     res.send(data);
+            // })
 
-    //$elematch:
-    products.aggregate([{ $match: { brand: name } }, { $sort: { qty: 1 } }], function(error, data) {
-        console.log(data);
-        res.send(data);
-    })
+            //$elematch:
+            products.aggregate([{ $match: { brand: name } }, { $sort: { qty: 1 } }], function(error, data) {
+                console.log(data);
+                if (data.length > 0) {
+                    callback(null, data);
+                } else {
+                    callback("data not found")
+                }
+            })
+
+        },
+    ], function(error, data) {
+        if (error) {
+            res.send(error);
+        } else {
+            res.send(data);
+        }
+    });
+
 })
 
 app.use(function(req, res) {
