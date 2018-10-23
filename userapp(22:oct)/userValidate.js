@@ -37,6 +37,4 @@ methods.ValidateEmail = function(req, res, next) {
         })
     }
 }
-
-
 module.exports = methods;
