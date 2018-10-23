@@ -74,7 +74,7 @@ app.get("/user", function(req, res) {
 })
 
 //post
-app.post("/user", [userValidate.ValidateEmail, userController.insertData]);
+app.post("/user", [userValidate.ValidateEmail, userController.getName, userController.insertData]);
 
 
 //delete

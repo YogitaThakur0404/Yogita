@@ -50,8 +50,16 @@ myapp.controller("loginCtrl", ["$scope", "$http", '$location', '$window', functi
         console.log("input to post=" + inputValue);
         $http.post("/user", inputValue)
             .then(function(response) {
-                    if (response) {
-                        console.log("resp in post =" + response);
+
+                    console.log("resp in post=" + response.data);
+
+                    if (response.data == "invalid") {
+                        $window.alert("user data invalid Please try again ....");
+                        refresh();
+                    } else if (response.data == "exist") {
+                        $window.alert("user email id is already exist Please try again ....");
+                        refresh();
+                    } else if (response.data == "user") {
                         $scope.postflag = 1;
                         $scope.msg = "data posted ...."
                         $window.alert("user data inserted");
