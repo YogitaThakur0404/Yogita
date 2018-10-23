@@ -126,6 +126,41 @@ app.delete('/user/:id', function(req, res) {
         })
 
 })
+
+
+//put by email/id
+app.put('/user/:id', function(req, res) {
+    let id = req.params.id;
+
+
+    return new promise(function(resolve, reject) {
+            users.find({ '_id': id },
+                function(error, data) {
+
+                    if (data.length > 0) {
+                        resolve(data);
+                    } else {
+                        reject(error);
+                    }
+                })
+
+        }).then(function(data) {
+            users.update({ '_id': id }, { '$set': { firstName: req.body.firstName, lastName: req.body.lastName, password: req.body.password, "userInfo.city": req.body.userInfo.city, "userInfo.address": req.body.userInfo.address } },
+                function(error) {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        res.send("updated")
+                    }
+                })
+        })
+        .catch(function(error) {
+            console.log(error);
+            res.send("Data not found to Update");
+        })
+
+
+})
 var server = app.listen(8054, function() {
     var host = server.address().address
     var port = server.address().port
